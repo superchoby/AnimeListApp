@@ -20,8 +20,9 @@ function rootReducer(state = initialState, action){
 
         case STORE_USERNAME:
             return Object.assign({}, state, {
-                token: state.username.concat(action.payload)
+                username: state.username.concat(action.payload)
                 });
+
         default:
             return state;
     }

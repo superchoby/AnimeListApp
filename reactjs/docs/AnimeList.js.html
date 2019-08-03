@@ -1,4 +1,32 @@
-import React from 'react';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: AnimeList.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: AnimeList.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React from 'react';
 import './AnimeList.css';
 import axios from 'axios';
 import Row from './AnimeRow';
@@ -9,6 +37,7 @@ import { prepareToDelete } from '../actions/index';
  * @file AnimeList is a React Component that let's the user see
  * the anime that they have watched
  * 
+ * @module AnimeList 
  * @extends React.Component
  */
 
@@ -30,16 +59,6 @@ function mapDispatchToProps(dispatch) {
     }
 }
 
-/**
- * mapStateToProps
- * @method
- * @summary Goes to the central store and retrieves those variables
- * and passses them down as props for this component
- * 
- * @param {Object} state - An object of arrays that store all
- * the state changes
- * @return {Object} UnnamedObject - the props to be passed down 
- */
 const mapStateToProps = state => {
     return { 
         token: state.token[state.token.length-1],
@@ -47,23 +66,15 @@ const mapStateToProps = state => {
     };
 }
 
-
 class AnimeList extends React.Component {
-
-    /**
-     * constructor
-     * @summary default constructor that binds methods and sets the state
-     * @param {*} props
-     * @constructor
-     */
     constructor(props) {
         super(props);
         this.state = {
             category_sort_rows_options: [],
             currentCategory: 'Time Entered',
             addNewAnimeTableRow: '',
-            addOrSubmit: <div id='add-anime-icon' className='add-icon' onClick={this.addRows}>&#43;</div>,
-            deleteCheckboxHeader: <td style={{display: 'none'}}></td>,
+            addOrSubmit: &lt;div id='add-anime-icon' className='add-icon' onClick={this.addRows}>&amp;#43;&lt;/div>,
+            deleteCheckboxHeader: &lt;td style={{display: 'none'}}>&lt;/td>,
         }
         this.changeOrder = this.changeOrder.bind(this);
         this.createRows = this.createRows.bind(this);
@@ -76,10 +87,6 @@ class AnimeList extends React.Component {
         this.deleteRows = this.deleteRows.bind(this);
         this.addToDeleteList = this.addToDeleteList.bind(this);
         this.animeToDelete = [];
-        this.headers = {
-            'Content-Type': 'application/json',
-            'Authorization': 'Token ' + this.props.token,
-        }
     }
 
     addToDeleteList = (animeToDeleteName, addToList) =>{
@@ -101,17 +108,17 @@ class AnimeList extends React.Component {
             return !this.animeToDelete.includes(anime.Name)
         })
 
-        for (let i=0; i<filteredArray.length; i++){
+        for (let i=0; i&lt;filteredArray.length; i++){
             filteredArray[i].number = i+1;
         }
 
         this.setState({
             anime_info: filteredArray,
-            deleteCheckboxHeader: <td style={{display: 'none'}}></td>,
+            deleteCheckboxHeader: &lt;td style={{display: 'none'}}>&lt;/td>,
         }, function(){
             this.createRows(this.state.anime_info);
         })
-        // for(let i=0; i<this.state.animeInfo.length; i++){
+        // for(let i=0; i&lt;this.state.animeInfo.length; i++){
         //     if(animeToDeleteName === this.state.animeInfo[i].Name){
         //     }
         // }
@@ -124,7 +131,7 @@ class AnimeList extends React.Component {
             this.props.startDeletingProcess(false);
             this.setState({
                 //adds an extra empty table header for the delete checkboxesy
-                deleteCheckboxHeader: <th></th>,
+                deleteCheckboxHeader: &lt;th>&lt;/th>,
             })
         }else{// the innerHTML === 'Confirm'
             document.getElementById('delete-button').innerHTML = 'Delete';
@@ -139,13 +146,13 @@ class AnimeList extends React.Component {
     addRows = () =>{
         if(this.state.anime_rows){
             this.setState({
-                addNewAnimeTableRow: <Row createNewRow={true} rowNumber={this.state.anime_rows.length + 1} />,
-                addOrSubmit: <button id='submit-anime-row' onClick={this.handleRowSubmit}>submit</button>,
+                addNewAnimeTableRow: &lt;Row createNewRow={true} rowNumber={this.state.anime_rows.length + 1} />,
+                addOrSubmit: &lt;button id='submit-anime-row' onClick={this.handleRowSubmit}>submit&lt;/button>,
             })
         }else{
             this.setState({
-                addNewAnimeTableRow: <Row createNewRow={true} rowNumber={1} />,
-                addOrSubmit: <button id='submit-anime-row' onClick={this.handleRowSubmit}>submit</button>,
+                addNewAnimeTableRow: &lt;Row createNewRow={true} rowNumber={1} />,
+                addOrSubmit: &lt;button id='submit-anime-row' onClick={this.handleRowSubmit}>submit&lt;/button>,
             })
         }
     }
@@ -157,8 +164,6 @@ class AnimeList extends React.Component {
             if(document.getElementById('reverse-button').innerHTML === 'Revert'){
                 document.getElementById('reverse-button').innerHTML = 'Reverse';
             } 
-            console.log(this.props.username)
-            console.log(this.props.username + '_list')
             let newAnime = {
                 Name: document.getElementById('title-input').value,
                 cover: document.getElementById('cover-filler').value,
@@ -167,14 +172,9 @@ class AnimeList extends React.Component {
                 Date_Finished: `${split_date_finished[2]}-${split_date_finished[1]}-${split_date_finished[0]}`,
                 OP_Rating: document.getElementById('op-rating-input').value,
                 Overall_Rating: document.getElementById('overall-rating-input').value,
-                List_Name: this.props.username + '_list',
             }
             
-            axios.post('http://127.0.0.1:8000/animes/api/anime/', 
-            newAnime,
-            {
-                headers: this.headers,
-            })
+            axios.post('http://127.0.0.1:8000/animes/api/post-anime', newAnime)
             .then(res =>{
                 console.log(res);
             })
@@ -188,12 +188,10 @@ class AnimeList extends React.Component {
             document.getElementById('date-end-input').value = '';
             document.getElementById('op-rating-input').value = 0;
             document.getElementById('overall-rating-input').value = 0;
-            // console.log(this.state.anime_info)
-            // let newAnimeArray = this.state.anime_info;
-            let newAnimeArray = this.state.anime_info ? this.state.anime_info : []
+            let newAnimeArray = this.state.anime_info;
             newAnimeArray.push(newAnime);
             this.setState({
-                addOrSubmit: <div id='add-anime-icon' className='add-icon' onClick={this.addRows}>&#43;</div>,
+                addOrSubmit: &lt;div id='add-anime-icon' className='add-icon' onClick={this.addRows}>&amp;#43;&lt;/div>,
                 addNewAnimeTableRow: '',
                 anime_info: newAnimeArray,
             }, function(){
@@ -202,10 +200,10 @@ class AnimeList extends React.Component {
         }else{
             this.setState({
                 addOrSubmit: 
-                    <React.Fragment>
-                        <button id='submit-anime-row' onClick={this.handleRowSubmit}>submit</button>
-                        <div style={{textAlign: 'center'}}>The name is required.</div>
-                    </React.Fragment>
+                    &lt;React.Fragment>
+                        &lt;button id='submit-anime-row' onClick={this.handleRowSubmit}>submit&lt;/button>
+                        &lt;div style={{textAlign: 'center'}}>The name is required.&lt;/div>
+                    &lt;/React.Fragment>
             })
         }
     }
@@ -233,7 +231,7 @@ class AnimeList extends React.Component {
             let global = this;
             sortedByCategoryAnimeInfoList.sort(function(firstAnime, secondAnime){
                 let checkIfDecimal = parseFloat(firstAnime[category])
-                if(typeof firstAnime[category] === 'string' && isNaN(checkIfDecimal)){
+                if(typeof firstAnime[category] === 'string' &amp;&amp; isNaN(checkIfDecimal)){
                     if(firstAnime[category].includes('-')){
                         let formattedDateOne = global.dateConverter(firstAnime[category]);
                         let formattedDateTwo = global.dateConverter(firstAnime[category]);
@@ -241,7 +239,7 @@ class AnimeList extends React.Component {
                     }else{
                         let firstString = firstAnime[category].toLowerCase()
                         let secondString = secondAnime[category].toLowerCase()
-                        if (firstString < secondString) //sort string ascending
+                        if (firstString &lt; secondString) //sort string ascending
                             return -1; 
                         else if (firstString > secondString)
                             return 1;
@@ -261,82 +259,77 @@ class AnimeList extends React.Component {
     }
 
     createRows = (animeInfo, currentCategory='Time Entered') =>{
-        if(animeInfo.length !== 0){//if the user has any anime at all recorded
-            //Takes an array of anime objects and a category
-            let categoryOptions = [];
-            let copyList = [];
-            const firstAnimeObject = animeInfo[0];
-            console.log(animeInfo)
-            //creates category options array
-            for(let i=0; i<Object.keys(firstAnimeObject).length; i++){
-                if(Object.keys(firstAnimeObject)[i] !== 'Personal_Thoughts' && Object.keys(firstAnimeObject)[i] !== 'cover'){
-                    categoryOptions.push(Object.keys(firstAnimeObject)[i]);
-                }
+        //Takes an array of anime objects and a category
+        let categoryOptions = [];
+        let copyList = [];
+        const firstAnimeObject = animeInfo[0];
+
+        //creates category options array
+        for(let i=0; i&lt;Object.keys(firstAnimeObject).length; i++){
+            if(Object.keys(firstAnimeObject)[i] !== 'Personal_Thoughts' &amp;&amp; Object.keys(firstAnimeObject)[i] !== 'cover'){
+                categoryOptions.push(Object.keys(firstAnimeObject)[i]);
             }
-            
-            //removes the underscore from the options and replaces it with a space
-            for(let i=0; i<categoryOptions.length; i++){
-                let temp = categoryOptions[i].split('_');
-                categoryOptions[i] = temp.join(' ')
-            }
-            
-            let categoryOptionsName = categoryOptions;
+        }
 
-            categoryOptions = categoryOptions.map((options) => 
-                <option key={options} value={options}>{options}</option>
-            )
+        //removes the underscore from the options and replaces it with a space
+        for(let i=0; i&lt;categoryOptions.length; i++){
+            let temp = categoryOptions[i].split('_');
+            categoryOptions[i] = temp.join(' ')
+        }
+        
+        let categoryOptionsName = categoryOptions;
 
-            categoryOptions.unshift(<option key='none' value=''>none</option>)
+        categoryOptions = categoryOptions.map((options) => 
+            &lt;option key={options} value={options}>{options}&lt;/option>
+        )
 
-            for(let i=0; i<animeInfo.length; i++){
-                animeInfo[i]['number'] = i + 1;
-                copyList.push(Object.assign({}, animeInfo[i]))
-            }
+        categoryOptions.unshift(&lt;option key='none' value=''>none&lt;/option>)
 
-            let tempAnimeList = animeInfo.map((anime)=>
-                <Row addToDeleteList={this.addToDeleteList} createNewRow={false} key={anime.Name} animeInfo={anime} />
-            )
+        for(let i=0; i&lt;animeInfo.length; i++){
+            animeInfo[i]['number'] = i + 1;
+            copyList.push(Object.assign({}, animeInfo[i]))
+        }
 
-            if(this.firstTimeLoading){
-                this.setState({
-                    anime_rows: tempAnimeList, //array of AnimeRow components
-                    category_sort_rows_options: categoryOptions, 
-                    category_sort_rows_names: categoryOptionsName,
-                    anime_info: animeInfo,
-                    copyList: copyList,
-                })
-                this.firstTimeLoading = false;
-            }else{
-                this.setState({
-                    anime_rows: tempAnimeList,
-                    currentCategory: currentCategory,
-                })
-            }
-            
-            return animeInfo;
-        }else{//if the user has no anime at all
+        let tempAnimeList = animeInfo.map((anime)=>
+            &lt;Row addToDeleteList={this.addToDeleteList} createNewRow={false} key={anime.Name} animeInfo={anime} />
+        )
+
+        if(this.firstTimeLoading){
             this.setState({
-                anime_rows: [], //array of AnimeRow components
-                category_sort_rows_names: [],
-                anime_info: [],
-                copyList: [],
+                anime_rows: tempAnimeList, //array of AnimeRow components
+                category_sort_rows_options: categoryOptions, 
+                category_sort_rows_names: categoryOptionsName,
+                anime_info: animeInfo,
+                copyList: copyList,
+            })
+            this.firstTimeLoading = false;
+        }else{
+            this.setState({
+                anime_rows: tempAnimeList,
+                currentCategory: currentCategory,
             })
         }
+        
+        return animeInfo;
     }
       
     componentDidMount(){
+        const headers = {
+            'Content-Type': 'application/json',
+            'Authorization': 'Token ' + this.props.token,
+        }
         const data = {
             username: this.props.username,
         }
         axios.post('http://127.0.0.1:8000/animes/api/animelist/',
         data,
         {
-            headers: this.headers,
+            headers: headers,
         })
         .then(res => {
             this.createRows(res.data.anime_set);
             let animeListNames = [];
-            for(let i=0; i<res.data.anime_set.length; i++){
+            for(let i=0; i&lt;res.data.anime_set.length; i++){
                 animeListNames.push(res.data.anime_set[i].Name)
             }
             this.setState({
@@ -351,7 +344,7 @@ class AnimeList extends React.Component {
     
     render() {
         return(
-            // <React.Fragment>
+            // &lt;React.Fragment>
             // It's a combination of things
             // So you would create your pseudo element
             // Then make parent container position: relative;, and the pseudo element position: absolute
@@ -361,55 +354,77 @@ class AnimeList extends React.Component {
             // But to make pseudo elements show up you need to also set content: ''; and display: block
             // I think that should do it
             
-            <div id='anime-list'>
-                <div id='welcome-sign'>
-                    <h1>Youkoso</h1>
-                    <h2>anata no AnimeLog</h2>
-                </div>
-                <div id='category-title'>
-                    <p id='current-filter'>Currently ordered by {this.state.currentCategory}</p>
-                    <div id='button-options'>
-                        <form id='category-form'>
-                            <select name='category-filter' onChange={this.changeOrder}>
+            &lt;div id='anime-list'>
+                &lt;div id='welcome-sign'>
+                    &lt;h1>Youkoso&lt;/h1>
+                    &lt;h2>anata no AnimeLog&lt;/h2>
+                &lt;/div>
+                &lt;div id='category-title'>
+                    &lt;p id='current-filter'>Currently ordered by {this.state.currentCategory}&lt;/p>
+                    &lt;div id='button-options'>
+                        &lt;form id='category-form'>
+                            &lt;select name='category-filter' onChange={this.changeOrder}>
                                 {this.state.category_sort_rows_options}
-                            </select>
-                        </form>
-                        <button id='reverse-button' onClick={this.handleReverse}>Reverse</button>
-                        <button id='delete-button' onClick={this.handleDelete}>Delete</button>
-                    </div>
-                </div>
+                            &lt;/select>
+                        &lt;/form>
+                        &lt;button id='reverse-button' onClick={this.handleReverse}>Reverse&lt;/button>
+                        &lt;button id='delete-button' onClick={this.handleDelete}>Delete&lt;/button>
+                    &lt;/div>
+                &lt;/div>
                 
-                <table id='anime-table'>
-                    <tbody>
-                        <tr>
+                &lt;table id='anime-table'>
+                    &lt;tbody>
+                        &lt;tr>
                             {this.state.deleteCheckboxHeader}
-                            <th>&nbsp;&nbsp;#&nbsp;&nbsp;</th>
-                            <th>&nbsp;Cover&nbsp;</th>
-                            <th id='name-category'>Name</th>
-                            <th>Personal Thoughts/Reaction</th>
-                            <th>Overall Rating</th>
-                            {/* <th>OST Rating</th> */}
-                            <th>OP Rating</th>
-                            {/* <th>ED Rating</th> */}
-                            <th>Date Started</th>
-                            <th>Date Finished</th>
-                            {/* <th>Add/Remove a Category</th> */}
-                        </tr>
-                    </tbody>
-                    <tbody id='anime-rows'>
+                            &lt;th>&amp;nbsp;&amp;nbsp;#&amp;nbsp;&amp;nbsp;&lt;/th>
+                            &lt;th>&amp;nbsp;Cover&amp;nbsp;&lt;/th>
+                            &lt;th id='name-category'>Name&lt;/th>
+                            &lt;th>Personal Thoughts/Reaction&lt;/th>
+                            &lt;th>Overall Rating&lt;/th>
+                            {/* &lt;th>OST Rating&lt;/th> */}
+                            &lt;th>OP Rating&lt;/th>
+                            {/* &lt;th>ED Rating&lt;/th> */}
+                            &lt;th>Date Started&lt;/th>
+                            &lt;th>Date Finished&lt;/th>
+                            {/* &lt;th>Add/Remove a Category&lt;/th> */}
+                        &lt;/tr>
+                    &lt;/tbody>
+                    &lt;tbody id='anime-rows'>
                         {this.state.anime_rows}
-                    </tbody>
-                    <tbody id='add-row'>
+                    &lt;/tbody>
+                    &lt;tbody id='add-row'>
                         {this.state.addNewAnimeTableRow}
-                    </tbody>
-                </table>
+                    &lt;/tbody>
+                &lt;/table>
                 {this.state.addOrSubmit}
-            </div>
-            //</React.Fragment>
+            &lt;/div>
+            //&lt;/React.Fragment>
         )
     }
 }
 
 const List = connect(mapStateToProps, mapDispatchToProps)(AnimeList)
 
-export default List;
+export default List;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-AnimeList.html">AnimeList</a></li></ul><h3>Classes</h3><ul><li><a href="AnimeRow.html">AnimeRow</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Sat Aug 03 2019 00:41:49 GMT-0700 (Pacific Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

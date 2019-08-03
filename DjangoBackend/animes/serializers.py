@@ -26,7 +26,7 @@ class AnimeListSerializer(ModelSerializer):
             'amount_of_anime',
             )
 
-class AnimePostSerializer(ModelSerializer):
+class AnimeSerializer(ModelSerializer):
     class Meta:
         model = Anime
         fields = (
@@ -39,8 +39,25 @@ class AnimePostSerializer(ModelSerializer):
         'ED_Rating',
         'OST_Rating',
         'Overall_Rating',
+        'animeList',
         )
 
-    def create(self, validated_data):
-        validated_data["animeList_id"] = 1
-        return Anime.objects.create(**validated_data)
+
+# class AnimePostSerializer(ModelSerializer):
+#     class Meta:
+#         model = Anime
+#         fields = (
+#         'Name', 
+#         'cover', 
+#         'Personal_Thoughts', 
+#         'Date_Started',
+#         'Date_Finished',
+#         'OP_Rating',
+#         'ED_Rating',
+#         'OST_Rating',
+#         'Overall_Rating',
+#         )
+
+    # def create(self, validated_data):
+    #     validated_data["animeList_id"] = 1
+    #     return Anime.objects.create(**validated_data)
