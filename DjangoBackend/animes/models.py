@@ -5,7 +5,7 @@ from django.db import models
 class AnimeList(models.Model):
     # amount_of_anime = models.IntegerField()
     list_name = models.CharField(max_length=107, blank=True)
-
+    # associated_token = models.TextField(blank=True)
     @property
     def amount_of_anime(self):
         # returns amount of anime seen

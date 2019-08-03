@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: AnimeRow.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: AnimeRow.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React from 'react';
+import './AnimeRow.css'
+import { connect } from 'react-redux';
+
+const mapStateToProps = state => {
+    return { 
+        shouldPrepareToDelete: state.shouldPrepareToDelete,
+    };
+}
+
+class AnimeRow extends React.Component{
+    /**
+     * @constructor
+     * @param {*} props 
+     */
+    constructor(props) {
+        super(props)
+        this.state = {
+             dateStarted: '',
+             dateFinished: '',
+             row: '',
+        }
+        this.handleNumberChange = this.handleNumberChange.bind(this);
+        this.handleRowCreationOrUpdate = this.handleRowCreationOrUpdate.bind(this);
+        this.handleDeleteBoxCheck  = this.handleDeleteBoxCheck.bind(this);
+    }
+
+    handleDeleteBoxCheck = e =>{
+        if(e.target.checked){
+            this.props.addToDeleteList(this.props.animeInfo.Name, true)
+        }else{
+            this.props.addToDeleteList(this.props.animeInfo.Name, false)
+        }
+    }
+
+    handleNumberChange = e =>{
+        if(!e.target.value.includes('.')){
+            e.target.value += '.0';
+        }
+    }
+
+    handleRowCreationOrUpdate = () =>{
+        let split_date_started, split_date_finished, reformatted_date_started, reformatted_date_finished;
+        
+
+        if(this.props.animeInfo.Date_Started !== null){
+            split_date_started = this.props.animeInfo.Date_Started.split('-')
+            reformatted_date_started = `${split_date_started[1]}/${split_date_started[2]}/${split_date_started[0]}`;
+            if(split_date_started[0] === 'undefined'){
+                reformatted_date_started = '';
+            }
+        }else{
+            reformatted_date_started = '';
+        }
+
+        if(this.props.animeInfo.Date_Finished !== null){
+            split_date_finished = this.props.animeInfo.Date_Finished.split('-')
+            reformatted_date_finished = `${split_date_finished[1]}/${split_date_finished[2]}/${split_date_finished[0]}`;
+            if(split_date_finished[0] === 'undefined'){
+                reformatted_date_finished = '';
+            }
+        }else{
+            reformatted_date_finished = '';
+        }
+
+        let dateStarted = reformatted_date_started;
+        let dateFinished = reformatted_date_finished;
+        let shouldPrepareToDelete = this.props.shouldPrepareToDelete;
+
+        let deleteCheckbox = shouldPrepareToDelete[shouldPrepareToDelete.length-1] ? &lt;td>&lt;input onClick={this.handleDeleteBoxCheck} type="checkbox" />&lt;/td> 
+        : 
+        &lt;td style={{display:'none'}}>&lt;/td>;
+
+        this.row = &lt;tr id='anime-info-row'>
+                    {deleteCheckbox}
+                    &lt;td>{this.props.animeInfo.number}&lt;/td>
+                    &lt;td>{this.props.animeInfo.cover}&lt;/td>
+                    &lt;td>{this.props.animeInfo.Name}&lt;/td>
+                    &lt;td>{this.props.animeInfo.Personal_Thoughts}&lt;/td>
+                    &lt;td>{this.props.animeInfo.Overall_Rating}&lt;/td>
+                    {/* &lt;td>{this.props.animeInfo.ost_rating}&lt;/td> */}
+                    &lt;td>{this.props.animeInfo.OP_Rating}&lt;/td>
+                    {/* &lt;td>{this.props.animeInfo.ed_rating}&lt;/td> */}
+                    &lt;td>{dateStarted}&lt;/td>
+                    &lt;td>{dateFinished}&lt;/td>
+                  &lt;/tr>
+    }
+
+    // componentDidUpdate = () =>{
+    //     let startDeleting = this.props.startDeleting;
+    //     if(startDeleting[startDeleting.length-1]){
+    //         if(this.state.deleteThisRow){
+    //             this.props.deleteRow(this.props.animeInfo);
+    //         }
+    //     }
+    // }
+    
+    componentDidMount = () =>{
+        if(!this.props.createNewRow){
+            this.handleRowCreationOrUpdate();
+        }else{
+            this.setState({
+                row: &lt;tr id='anime-info-row'>
+                        &lt;td style={{fontSize: '14px'}}>{this.props.rowNumber}&lt;/td>
+                        &lt;td>&lt;input id='cover-filler' placeholder='filler'>&lt;/input>&lt;/td>
+                        &lt;td>&lt;input id='title-input' placeholder='title'>&lt;/input>&lt;/td>
+                        &lt;td>&lt;textarea id='self_description_data_input' rows='9' cols='55' >&lt;/textarea>&lt;/td>
+                        &lt;td>&lt;input id='overall-rating-input' type='number' min='0' max='10' step='.5' onChange={this.handleNumberChange} className='number-input'>&lt;/input>&lt;/td>
+                        {/* &lt;td>{this.props.animeInfo.ost_rating}&lt;/td> */}
+                        &lt;td>&lt;input id='op-rating-input' type='number' min='0' max='10' step='.5' onChange={this.handleNumberChange} className='number-input'>&lt;/input>&lt;/td>
+                        {/* &lt;td>{this.props.animeInfo.ed_rating}&lt;/td> */}
+                        &lt;td>&lt;input id='date-start-input' className='date-input' placeholder='MM/DD/YYYY'>&lt;/input>&lt;/td>
+                        &lt;td>&lt;input id='date-end-input' className='date-input' placeholder='MM/DD/YYYY'>&lt;/input>&lt;/td>
+                    &lt;/tr>,
+            })
+        }
+    }
+
+    render(){
+        this.handleRowCreationOrUpdate()
+        // let deleteCheckbox = shouldPrepareToDelete[shouldPrepareToDelete.length-1] ? &lt;td>&lt;input onClick={this.handleDeleteBoxCheck} type="checkbox" />&lt;/td> 
+        return(
+            &lt;React.Fragment>
+                {/* {this.state.row} */}
+                {this.row}
+            &lt;/React.Fragment>
+        )
+    }
+}
+
+const Row = connect(mapStateToProps)(AnimeRow);
+
+export default Row;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-AnimeList.html">AnimeList</a></li></ul><h3>Classes</h3><ul><li><a href="AnimeRow.html">AnimeRow</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Sat Aug 03 2019 00:41:49 GMT-0700 (Pacific Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
