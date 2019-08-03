@@ -1,0 +1,65 @@
+#category-title{
+    width: 90%;
+    text-align: center;
+    border-style: solid;
+    border-color: blue;
+    border-width: 1px;
+    margin-right: 0;
+    display: inline-block;
+    margin-top: 0;
+}
+
+#anime-table{
+    border-collapse: collapse;
+    border-spacing: 2px;
+}
+
+#anime-rows{
+    font-size: 14px;
+}
+
+#anime-list{
+    margin: 0 auto;
+    /* width: auto; */
+    display: inline-block;
+    padding: 0;
+    width: 900px;
+}
+
+#current-filter{
+    margin: 0;
+    display: inline-block;
+}
+
+th{
+    font-size: 14px;
+    font-weight: normal;
+}
+
+th, td{
+    border: 1px solid black;
+    text-align: center;
+}
+
+#welcome-sign{
+    text-align: center;
+    background-color: #c334d9;
+    margin-bottom: 0;
+}
+
+form{
+    display: inline-block;
+}
+
+.add-icon{
+    text-align: center;
+}
+
+#button-options{
+    float: right;
+}
+
+#submit-anime-row{
+    display: block;
+    margin: 3px auto;
+}
