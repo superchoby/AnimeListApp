@@ -1,18 +1,7 @@
 from django.db import models
-
+from users.models import User
+from django.conf import settings
 # Create your models here.
-
-class AnimeList(models.Model):
-    # amount_of_anime = models.IntegerField()
-    list_name = models.CharField(max_length=107, blank=True)
-    # associated_token = models.TextField(blank=True)
-    @property
-    def amount_of_anime(self):
-        # returns amount of anime seen
-        return self.anime_set.count()
-
-    def __str__(self):
-        return self.list_name
 
 class Anime(models.Model):
     Name = models.CharField(max_length=100, blank=True)
@@ -24,7 +13,7 @@ class Anime(models.Model):
     ED_Rating = models.DecimalField(null=True, max_digits=3, decimal_places=1)
     OST_Rating = models.DecimalField(null=True, max_digits=3, decimal_places=1)
     Overall_Rating = models.DecimalField(null=True, max_digits=3, decimal_places=1)
-    animeList = models.ForeignKey(AnimeList, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.Name

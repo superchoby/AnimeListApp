@@ -136,7 +136,7 @@ class AnimeList extends React.Component {
         if(document.getElementById('delete-button').innerHTML === 'Delete'){
             document.getElementById('delete-button').innerHTML = 'Confirm';
             this.props.prepareToDelete(true);
-            this.props.startDeletingProcess(false);
+            // this.props.startDeletingProcess(false);
             this.setState({
                 //adds an extra empty table header for the delete checkboxesy
                 deleteCheckboxHeader: <th></th>,
@@ -145,9 +145,6 @@ class AnimeList extends React.Component {
             document.getElementById('delete-button').innerHTML = 'Delete';
             this.props.prepareToDelete(false);
             this.deleteRows();
-            this.setState({
-
-            })
         }
     }
 
@@ -182,24 +179,24 @@ class AnimeList extends React.Component {
      */
     handleRowSubmit = e =>{
         if(document.getElementById('title-input').value !== ''){
-            let split_date_started = document.getElementById('date-start-input').value.split('/');
-            let split_date_finished = document.getElementById('date-end-input').value.split('/');
             if(document.getElementById('reverse-button').innerHTML === 'Revert'){
                 document.getElementById('reverse-button').innerHTML = 'Reverse';
             } 
-            console.log(this.props.username)
-            console.log(this.props.username + '_list')
+            let split_date_started = document.getElementById('date-start-input').value.split('/');
+            let split_date_finished = document.getElementById('date-end-input').value.split('/');
+            let formattted_date_started = split_date_started.length === 1 ? null : `${split_date_started[2]}-${split_date_started[1]}-${split_date_started[0]}`
+            let formattted_date_finished = split_date_finished.length === 1 ? null : `${split_date_finished[2]}-${split_date_finished[1]}-${split_date_finished[0]}`
             let newAnime = {
-                Name: document.getElementById('title-input').value,
-                cover: document.getElementById('cover-filler').value,
-                Personal_Thoughts: document.getElementById('self_description_data_input').value,
-                Date_Started: `${split_date_started[2]}-${split_date_started[1]}-${split_date_started[0]}`,
-                Date_Finished: `${split_date_finished[2]}-${split_date_finished[1]}-${split_date_finished[0]}`,
-                OP_Rating: document.getElementById('op-rating-input').value,
-                Overall_Rating: document.getElementById('overall-rating-input').value,
-                List_Name: this.props.username + '_list',
+                Name: document.getElementById('title-input').value ? document.getElementById('title-input').value : null,
+                cover: document.getElementById('cover-filler').value ? document.getElementById('cover-filler').value : null,
+                Personal_Thoughts: document.getElementById('self_description_data_input').value ? document.getElementById('self_description_data_input').value : null,
+                Date_Started: formattted_date_started,
+                Date_Finished: formattted_date_finished,
+                OP_Rating: document.getElementById('op-rating-input').value ? document.getElementById('op-rating-input').value : null,
+                Overall_Rating: document.getElementById('overall-rating-input').value ? document.getElementById('overall-rating-input').value : null,
+                username: this.props.username,
             }
-            
+            console.log(newAnime)
             axios.post('http://127.0.0.1:8000/animes/api/anime/', 
             newAnime,
             {
@@ -385,11 +382,7 @@ class AnimeList extends React.Component {
      * request to the server and with the info creates the user's anime table
      */
     componentDidMount(){
-        const data = {
-            username: this.props.username,
-        }
-        axios.post('http://127.0.0.1:8000/animes/api/animelist/',
-        data,
+        axios.get('http://127.0.0.1:8000/users/v1/user/',
         {
             headers: this.headers,
         })

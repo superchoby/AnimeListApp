@@ -1,10 +1,10 @@
-from django.contrib.auth.models import User
-from rest_framework import generics, viewsets, mixins
-from rest_framework.permissions import AllowAny
+from .models import User
+from rest_framework import viewsets, mixins
 from .serializers import UserSerializer
-from animes.serializers import AnimeListSerializer
-from animes.models import AnimeList
 from rest_framework.response import Response
+from rest_framework.authtoken.models import Token
+from rest_framework import status
+from .permissions import IsCreationOrIsAuthenticated
 
 class UserView(mixins.RetrieveModelMixin,
                     mixins.CreateModelMixin,
@@ -15,21 +15,21 @@ class UserView(mixins.RetrieveModelMixin,
     
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    #evnetually allow this permission class to just be post
-    #requests so that not just any stranger can go and check
-    #all the users
-    permission_classes = [AllowAny]
+    permission_classes = [IsCreationOrIsAuthenticated]
     def create(self, request):
-        # print('woooooooo')
-        newListName = request.data['username'].lower() + '_list'
-        # print(newListName)
-        newList = AnimeList.objects.create(list_name=newListName)
+        serializer = UserSerializer(request.data)
+        serializer.is_valid(raise_exception=True)
         user = User.objects.create_user(
             email = request.data['email'],
             username = request.data['username'],
             password = request.data['password'],
-        )        
+        )
+        Token.objects.get_or_create(user=user)        
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    def list(self, request):
+        token = request.META['HTTP_AUTHORIZATION'].split(' ')[1]
+        user = Token.objects.get(key=token).user   
         serializer = UserSerializer(user)
         return Response(serializer.data)
-
             
