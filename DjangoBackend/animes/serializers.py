@@ -8,11 +8,5 @@ class AnimeSerializer(ModelSerializer):
         fields = (
         'Name', 
         'cover', 
-        'Personal_Thoughts', 
-        'Date_Started',
-        'Date_Finished',
-        'OP_Rating',
-        'ED_Rating',
-        'OST_Rating',
-        'Overall_Rating',
+        'data',
         )

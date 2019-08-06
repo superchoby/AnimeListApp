@@ -197,7 +197,7 @@ class AnimeList extends React.Component {
                 username: this.props.username,
             }
             console.log(newAnime)
-            axios.post('http://127.0.0.1:8000/animes/api/anime/', 
+            axios.post('http://127.0.0.1:8000/animes/v1/anime/', 
             newAnime,
             {
                 headers: this.headers,
@@ -387,10 +387,16 @@ class AnimeList extends React.Component {
             headers: this.headers,
         })
         .then(res => {
-            this.createRows(res.data.anime_set);
+            let anime_set = res.data.anime_set
+            for(let i=0; i<anime_set.length; i++){
+                for(let j=0; j<Object.keys(anime_set[0].data).length; j++){
+                    anime_set[i][Object.keys(anime_set[0].data)[j]] = anime_set[i].data[Object.keys(anime_set[0].data)[j]]
+                }
+            }
+            this.createRows(anime_set);
             let animeListNames = [];
-            for(let i=0; i<res.data.anime_set.length; i++){
-                animeListNames.push(res.data.anime_set[i].Name)
+            for(let i=0; i<anime_set.length; i++){
+                animeListNames.push(anime_set[i].Name)
             }
             this.setState({
                 'animeNamesList': animeListNames,

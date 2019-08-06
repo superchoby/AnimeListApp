@@ -65,7 +65,7 @@ class SignupPage extends Component {
    * if signup info is valid, a token is returned.
    */
   handleSubmit = e =>{
-    axios.post('http://127.0.0.1:8000/api/user/', this.state)
+    axios.post('http://127.0.0.1:8000/users/v1/user/', this.state)
     .then(res =>{
       this.setState({
         redirect: true,

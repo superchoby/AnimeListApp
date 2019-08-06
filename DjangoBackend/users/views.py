@@ -17,19 +17,24 @@ class UserView(mixins.RetrieveModelMixin,
     serializer_class = UserSerializer
     permission_classes = [IsCreationOrIsAuthenticated]
     def create(self, request):
-        serializer = UserSerializer(request.data)
-        serializer.is_valid(raise_exception=True)
-        user = User.objects.create_user(
+        serializer = UserSerializer(data=request.data)
+        if serializer.is_valid():
+            user = User.objects.create_user(
             email = request.data['email'],
             username = request.data['username'],
             password = request.data['password'],
-        )
-        Token.objects.get_or_create(user=user)        
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+            )
+            Token.objects.get_or_create(user=user)        
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, 
+            status=status.HTTP_400_BAD_REQUEST)
+        
 
     def list(self, request):
         token = request.META['HTTP_AUTHORIZATION'].split(' ')[1]
         user = Token.objects.get(key=token).user   
         serializer = UserSerializer(user)
+        serializer.data['anime_set'].reverse()
         return Response(serializer.data)
             
