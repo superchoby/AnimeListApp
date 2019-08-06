@@ -32,3 +32,11 @@ textarea{
 #cover-filler{
     width: 25px;
 }
+
+.gray{
+    background-color: #F6F6F6;
+}
+
+.white{
+    background-color: white;
+}

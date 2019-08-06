@@ -4,6 +4,13 @@ import List from './AnimeList';
 import Login from './LoginPage';
 import SignupPage from './Signup';
 
+/**
+ * @file WholePage is a React Component that is the highest
+ * level component who's child components change depending
+ * on the current Route
+ * @extends React.Component
+ */
+
 class WholePage extends React.Component {
     render() {
         return(
