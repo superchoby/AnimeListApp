@@ -1,8 +1,18 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
+/**
+ * @file Signup is a React Component that handles account creation
+ * 
+ * @extends React.Component
+ */
+
 class SignupPage extends Component {
 
+  /**
+    * @constructor
+    * @param {props} props - the props for the class
+    */
   constructor(props) {
     super(props)
     this.state = {
@@ -17,34 +27,44 @@ class SignupPage extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
+  /**
+   * @method
+   * @summary - onchange function that updates state as user types
+   * their email
+   */
   updateEmailChange = e =>{
-    //onchange function that updates state as user types
-    //their email
     this.setState({
       email: e.target.value,
     })
   }
-
+  /**
+   * @method
+   * @summary - onchange function that updates state as user types
+   * their username
+   */
   updateUsernameChange = e =>{
-    //onchange function that updates state as user types
-    //their username
     this.setState({
       username: e.target.value,
     })
   }
 
+  /**
+   * @method
+   * @summary - onchange function that updates state as user types
+   * their password
+   */
   updatePasswordChange = e =>{
-    //onchange function that updates state as user types
-    //their password
     this.setState({
       password: e.target.value,
     })
   }
 
+  /**
+   * @method
+   * @summary - sends the username and password to api endpoint and 
+   * if signup info is valid, a token is returned.
+   */
   handleSubmit = e =>{
-    //sends the username and password to api endpoint and 
-    //if login is successful, a token is returned.
-    
     axios.post('http://127.0.0.1:8000/api/user/', this.state)
     .then(res =>{
       this.setState({

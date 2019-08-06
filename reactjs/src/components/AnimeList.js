@@ -53,7 +53,7 @@ class AnimeList extends React.Component {
     /**
      * constructor
      * @summary default constructor that binds methods and sets the state
-     * @param {*} props
+     * @param {*} props - Class that constructor inherits from
      * @constructor
      */
     constructor(props) {
@@ -72,9 +72,10 @@ class AnimeList extends React.Component {
         this.handleReverse = this.handleReverse.bind(this);
         this.addRows = this.addRows.bind(this);
         this.handleRowSubmit = this.handleRowSubmit.bind(this);
-        this.handleDelete = this.handleDelete.bind(this);
+        this.handleDeleteButtonSubmit = this.handleDeleteButtonSubmit.bind(this);
         this.deleteRows = this.deleteRows.bind(this);
         this.addToDeleteList = this.addToDeleteList.bind(this);
+        
         this.animeToDelete = [];
         this.headers = {
             'Content-Type': 'application/json',
@@ -82,10 +83,17 @@ class AnimeList extends React.Component {
         }
     }
 
+    /**
+     * @method
+     * @summary function to pass down as props so when 
+     * an anime checkbox is filled they are added
+     * to list of anime's name to delete
+     * @param {string} animeToDeleteName - Name of anime to delete
+     * @param {boolean} addToList - Determines whether or not the anime's name  
+     * should be added or removed from the list depending on if the
+     * anime has been checkmarked or uncheckmarked
+     */
     addToDeleteList = (animeToDeleteName, addToList) =>{
-        //function to pass down as props so when 
-        //an anime checkbox is filled they are added
-        //to list of anime's name to delete
         if(addToList){
             this.animeToDelete.push(animeToDeleteName);
         }else{
@@ -93,8 +101,11 @@ class AnimeList extends React.Component {
         }
     }
 
+    /**
+     * @method
+     * @summary final delete function that actually deletes the anime
+     */
     deleteRows = () =>{
-        //final delete function that actually deletes the anime
         let filteredArray = this.state.anime_info.filter(anime =>{
             // filters out all anime who's name matches the anime to delete
             // only one should be selected as names are unique
@@ -111,13 +122,17 @@ class AnimeList extends React.Component {
         }, function(){
             this.createRows(this.state.anime_info);
         })
-        // for(let i=0; i<this.state.animeInfo.length; i++){
-        //     if(animeToDeleteName === this.state.animeInfo[i].Name){
-        //     }
-        // }
     }
 
-    handleDelete = e =>{
+    /**
+     * @method
+     * @summary Handles when the delete button is submitted
+     * this method will change the text of the delete button to 
+     * confirmed and will add checkmark boxes in the table that 
+     * the user can click to delete the anime
+     * @param {event} e - paramter that gets passed in button click 
+     */
+    handleDeleteButtonSubmit = e =>{
         if(document.getElementById('delete-button').innerHTML === 'Delete'){
             document.getElementById('delete-button').innerHTML = 'Confirm';
             this.props.prepareToDelete(true);
@@ -136,6 +151,12 @@ class AnimeList extends React.Component {
         }
     }
 
+    /**
+     * @method
+     * @summary Adds a new row to the table that allows users to
+     * input new anime information, if this is the user's first anime then
+     * the else is triggered as the rowNumber needs to be set to one
+     */
     addRows = () =>{
         if(this.state.anime_rows){
             this.setState({
@@ -150,6 +171,15 @@ class AnimeList extends React.Component {
         }
     }
 
+    /**
+     * @method
+     * @summary When an anime's info is added and user presses submit,
+     * this function activates. This grabs the values of all the inputs and 
+     * sends a post request to the server containing the anime's info.
+     * Finally, the anime is stored in the list containing the anime
+     * 
+     * @param {event} e - The event paramter passed when button is clicked
+     */
     handleRowSubmit = e =>{
         if(document.getElementById('title-input').value !== ''){
             let split_date_started = document.getElementById('date-start-input').value.split('/');
@@ -210,6 +240,11 @@ class AnimeList extends React.Component {
         }
     }
 
+    /**
+     * @method
+     * @summary Reverses the order that the anime is listed
+     * @param {event} e - The event paramter passed when button is clicked
+     */
     handleReverse = e =>{
         document.getElementById('reverse-button').innerHTML = document.getElementById('reverse-button').innerHTML === 'Reverse' ? 'Revert' : 'Reverse';
         this.setState({
@@ -217,6 +252,12 @@ class AnimeList extends React.Component {
         })
     }
 
+    /**
+     * @method
+     * @summary turns the date into a single numerical value that
+     * is used when ordering the animes by date
+     * @param {string} date - the date the anime was either started or finished
+     */
     dateConverter = date =>{
         let splitDate = date.split('-');
         let totalDateValue = 0;
@@ -224,6 +265,13 @@ class AnimeList extends React.Component {
         return totalDateValue;
     }
 
+    /**
+     * @method
+     * @summary Returns the reverse buttons text to 'Reverse' and 
+     * sorts the order of the anime depending on the category chosen 
+     * by the use
+     * @param {event} e - The event paramter passed when button is clicked
+     */
     changeOrder(e){
         document.getElementById('reverse-button').innerHTML = 'Reverse';
         if(e.target.value){
@@ -248,7 +296,6 @@ class AnimeList extends React.Component {
                         return 0; //default return value (no sorting)
                     }
                 }else{
-                    console.log('hi')
                     return parseFloat(secondAnime[category]) - parseFloat(firstAnime[category]);
                     // return parseFloat(firstAnime[category]) - parseFloat(secondAnime[category]);
                 }
@@ -260,13 +307,21 @@ class AnimeList extends React.Component {
         }   
     }
 
+    /**
+     * @method
+     * @summary Creates the anime rows by parsing the anime info passed
+     * and passing down the information as props to the AnimeRow component
+     * changes the part of the site that says "currently ordered by" 
+     * @param {array} animeInfo - An array of objects that store the anime's info
+     * @param {string} currentCategory - The current category that the table is
+     * sorted by
+     */
     createRows = (animeInfo, currentCategory='Time Entered') =>{
         if(animeInfo.length !== 0){//if the user has any anime at all recorded
             //Takes an array of anime objects and a category
             let categoryOptions = [];
             let copyList = [];
             const firstAnimeObject = animeInfo[0];
-            console.log(animeInfo)
             //creates category options array
             for(let i=0; i<Object.keys(firstAnimeObject).length; i++){
                 if(Object.keys(firstAnimeObject)[i] !== 'Personal_Thoughts' && Object.keys(firstAnimeObject)[i] !== 'cover'){
@@ -324,6 +379,11 @@ class AnimeList extends React.Component {
         }
     }
       
+    /**
+     * @method
+     * @summary - Activates after the component mounts, performs a post
+     * request to the server and with the info creates the user's anime table
+     */
     componentDidMount(){
         const data = {
             username: this.props.username,
@@ -351,20 +411,10 @@ class AnimeList extends React.Component {
     
     render() {
         return(
-            // <React.Fragment>
-            // It's a combination of things
-            // So you would create your pseudo element
-            // Then make parent container position: relative;, and the pseudo element position: absolute
-            // To put it next to the left border, you would do left: 0; width: 2px;
-            // Then to give it a margin from top/bottom border you do top: 5px; bottom: 5px
-            // And finally give it your desired background color, background-color: #999 or the like
-            // But to make pseudo elements show up you need to also set content: ''; and display: block
-            // I think that should do it
-            
             <div id='anime-list'>
                 <div id='welcome-sign'>
-                    <h1>Youkoso</h1>
-                    <h2>anata no AnimeLog</h2>
+                    <h1>MitaAnime</h1>
+                    <h2>e youkouso!</h2>
                 </div>
                 <div id='category-title'>
                     <p id='current-filter'>Currently ordered by {this.state.currentCategory}</p>
@@ -375,12 +425,12 @@ class AnimeList extends React.Component {
                             </select>
                         </form>
                         <button id='reverse-button' onClick={this.handleReverse}>Reverse</button>
-                        <button id='delete-button' onClick={this.handleDelete}>Delete</button>
+                        <button id='delete-button' onClick={this.handleDeleteButtonSubmit}>Delete</button>
                     </div>
                 </div>
                 
                 <table id='anime-table'>
-                    <tbody>
+                    <thead>
                         <tr>
                             {this.state.deleteCheckboxHeader}
                             <th>&nbsp;&nbsp;#&nbsp;&nbsp;</th>
@@ -395,7 +445,7 @@ class AnimeList extends React.Component {
                             <th>Date Finished</th>
                             {/* <th>Add/Remove a Category</th> */}
                         </tr>
-                    </tbody>
+                    </thead>
                     <tbody id='anime-rows'>
                         {this.state.anime_rows}
                     </tbody>

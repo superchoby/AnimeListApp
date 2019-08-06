@@ -9,7 +9,7 @@
     margin-top: 0;
 }
 
-#anime-table{
+table {
     border-collapse: collapse;
     border-spacing: 2px;
 }
@@ -20,6 +20,7 @@
 
 #anime-list{
     margin: 0 auto;
+    margin-top: 70px;
     /* width: auto; */
     display: inline-block;
     padding: 0;
@@ -31,20 +32,24 @@
     display: inline-block;
 }
 
+th, td{
+    /* border: 1px solid black; */
+    text-align: center;
+    border-collapse: collapse;
+}
+
 th{
     font-size: 14px;
     font-weight: normal;
 }
 
-th, td{
-    border: 1px solid black;
-    text-align: center;
-}
-
 #welcome-sign{
     text-align: center;
-    background-color: #c334d9;
+    background-color: #0278FE;
     margin-bottom: 0;
+    padding: 6px;
+    border-radius: 10px 10px 0 0;
+    font-family: Sans-Serif;
 }
 
 form{
@@ -62,4 +67,8 @@ form{
 #submit-anime-row{
     display: block;
     margin: 3px auto;
+}
+
+thead{
+    background-color: #0278FE;
 }
