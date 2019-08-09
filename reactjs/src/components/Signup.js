@@ -65,15 +65,34 @@ class SignupPage extends Component {
    * if signup info is valid, a token is returned.
    */
   handleSubmit = e =>{
-    axios.post('http://127.0.0.1:8000/users/v1/user/', this.state)
-    .then(res =>{
-      this.setState({
-        redirect: true,
+    let canSendInfo = true
+    if(this.state.username.length < 2){
+      console.log('the username but be between 2-32 characters')
+      canSendInfo = false
+    }
+    if(this.state.password.length < 6){
+      console.log('password must be at least 6 characters')
+      canSendInfo = false
+    }
+    if(canSendInfo){
+      axios.post('http://127.0.0.1:8000/users/v1/user/', this.state)
+      .then(res =>{
+        console.log(res)
+        this.setState({
+          redirect: true,
+        })
       })
-    })
-    .catch(error =>{
-        console.log(error);
-    })
+      .catch(error =>{
+          console.log(error.response.data)
+          for (let key of Object.keys(error.response.data)){
+            if (error.response.data[key][0] === "user with this email already exists."){
+              console.log('user with that email already exists')
+            }else if (error.response.data[key][0] === "A user with that username already exists."){
+              console.log('A user with that username already exists')
+            }
+          }
+      })
+    }
     e.preventDefault();
   }
   
