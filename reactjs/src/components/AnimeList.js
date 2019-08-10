@@ -47,7 +47,6 @@ const mapStateToProps = state => {
     };
 }
 
-
 class AnimeList extends React.Component {
 
     /**
@@ -411,23 +410,26 @@ class AnimeList extends React.Component {
     render() {
         return(
             <div id='anime-list'>
+
                 <div id='welcome-sign'>
                     <h1>MitaAnime</h1>
                     <h2>e youkouso!</h2>
-                </div>
-                <div id='category-title'>
-                    <p id='current-filter'>Currently ordered by {this.state.currentCategory}</p>
-                    <div id='button-options'>
-                        <form id='category-form'>
-                            <select name='category-filter' onChange={this.changeOrder}>
-                                {this.state.category_sort_rows_options}
-                            </select>
-                        </form>
-                        <button id='reverse-button' onClick={this.handleReverse}>Reverse</button>
-                        <button id='delete-button' onClick={this.handleDeleteButtonSubmit}>Delete</button>
+                    <div id='category-title'>
+                        <p id='current-filter'>Currently ordered by {this.state.currentCategory}</p>
+                        <div id='button-options'>
+                            <form id='category-form'>
+                                <div id='category-dropdown'>
+                                    <select onChange={this.changeOrder}>
+                                        {this.state.category_sort_rows_options}
+                                    </select>
+                                </div>
+                            </form>
+                            <button id='reverse-button' className='option-buttons' onClick={this.handleReverse}>Reverse</button>
+                            <button id='delete-button' className='option-buttons' onClick={this.handleDeleteButtonSubmit}>Delete</button>
+                        </div>
                     </div>
                 </div>
-                
+
                 <table id='anime-table'>
                     <thead>
                         <tr>
@@ -445,12 +447,15 @@ class AnimeList extends React.Component {
                             {/* <th>Add/Remove a Category</th> */}
                         </tr>
                     </thead>
+
                     <tbody id='anime-rows'>
                         {this.state.anime_rows}
                     </tbody>
+
                     <tbody id='add-row'>
                         {this.state.addNewAnimeTableRow}
                     </tbody>
+                    
                 </table>
                 {this.state.addOrSubmit}
             </div>

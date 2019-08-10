@@ -71,6 +71,7 @@ coverage.xml
 
 # Django stuff:
 db.sqlite3-journal
+migrations/
 
 # Flask stuff:
 instance/
@@ -487,3 +488,4 @@ pip-selfcheck.json
 .history
 
 # End of https://www.gitignore.io/api/python,django,virtualenv,reactnative
+

@@ -21,7 +21,6 @@ const mapStateToProps = state => {
     };
 }
 
-let makeRowGray = false;
 
 class AnimeRow extends React.Component{
     /**
@@ -106,37 +105,19 @@ class AnimeRow extends React.Component{
             : 
             <td style={{display:'none'}}></td>;
 
-            if(makeRowGray){
-                this.row = <tr id='anime-info-row' className='gray'>
-                            {deleteCheckbox}
-                            <td>{this.props.animeInfo.number}</td>
-                            <td onClick={this.prepareUpdate}>{this.props.animeInfo.cover}</td>
-                            <td>{this.props.animeInfo.Name}</td>
-                            <td>{this.props.animeInfo.Personal_Thoughts}</td>
-                            <td>{this.props.animeInfo.Overall_Rating}</td>
-                            {/* <td>{this.props.animeInfo.ost_rating}</td> */}
-                            <td>{this.props.animeInfo.OP_Rating}</td>
-                            {/* <td>{this.props.animeInfo.ed_rating}</td> */}
-                            <td>{dateStarted}</td>
-                            <td>{dateFinished}</td>
-                        </tr>
-                makeRowGray = false;
-            }else{
-                this.row = <tr id='anime-info-row' className='white'>
-                            {deleteCheckbox}
-                            <td>{this.props.animeInfo.number}</td>
-                            <td>{this.props.animeInfo.cover}</td>
-                            <td>{this.props.animeInfo.Name}</td>
-                            <td>{this.props.animeInfo.Personal_Thoughts}</td>
-                            <td>{this.props.animeInfo.Overall_Rating}</td>
-                            {/* <td>{this.props.animeInfo.ost_rating}</td> */}
-                            <td>{this.props.animeInfo.OP_Rating}</td>
-                            {/* <td>{this.props.animeInfo.ed_rating}</td> */}
-                            <td>{dateStarted}</td>
-                            <td>{dateFinished}</td>
-                        </tr>
-                makeRowGray = true;
-            }
+            this.row = <tr id='anime-info-row'>
+                        {deleteCheckbox}
+                        <td>{this.props.animeInfo.number}</td>
+                        <td onClick={this.prepareUpdate}>{this.props.animeInfo.cover}</td>
+                        <td>{this.props.animeInfo.Name}</td>
+                        <td>{this.props.animeInfo.Personal_Thoughts}</td>
+                        <td>{this.props.animeInfo.Overall_Rating}</td>
+                        {/* <td>{this.props.animeInfo.ost_rating}</td> */}
+                        <td>{this.props.animeInfo.OP_Rating}</td>
+                        {/* <td>{this.props.animeInfo.ed_rating}</td> */}
+                        <td>{dateStarted}</td>
+                        <td>{dateFinished}</td>
+                    </tr>
         }else{
         this.row =  <tr id='anime-info-row'>
                         <td style={{fontSize: '14px'}}>{this.props.rowNumber}</td>

@@ -1,12 +1,12 @@
 #category-title{
-    width: 90%;
+    width: 100%;
     text-align: center;
-    border-style: solid;
-    border-color: blue;
-    border-width: 1px;
-    margin-right: 0;
-    display: inline-block;
-    margin-top: 0;
+    position: absolute;
+    background-color: rgb(0, 0, 0, .6);
+    bottom: 0;
+    margin: 0;
+    float: left;
+    vertical-align: center;
 }
 
 table {
@@ -19,21 +19,18 @@ table {
 }
 
 #anime-list{
-    margin: 0 auto;
-    margin-top: 70px;
-    /* width: auto; */
-    display: inline-block;
     padding: 0;
-    width: 900px;
+    width: 80%;
 }
 
 #current-filter{
     margin: 0;
     display: inline-block;
+    line-height: 42px;
+    color: white;
 }
 
 th, td{
-    /* border: 1px solid black; */
     text-align: center;
     border-collapse: collapse;
 }
@@ -45,11 +42,11 @@ th{
 
 #welcome-sign{
     text-align: center;
-    background-color: #0278FE;
-    margin-bottom: 0;
-    padding: 6px;
-    border-radius: 10px 10px 0 0;
+    margin: 0 auto;
+    position: relative;
     font-family: Sans-Serif;
+    height: 240px;
+    background-image: url("../images/animetreebackground.jpg");
 }
 
 form{
@@ -70,5 +67,31 @@ form{
 }
 
 thead{
-    background-color: #0278FE;
+    background: white;
+    
+}
+
+table thead tr{
+    -webkit-box-shadow: 0 4px 10px -4px black;
+	   -moz-box-shadow: 0 4px 10px -4px black;
+            box-shadow: 0 4px 10px -4px black;
+}
+
+#category-dropdown select{
+    background: white;
+    padding: 10px;
+    width: 180px;
+    border: none;
+    font-size: 18px;
+    -webkit-box-shadow: 0 4px 10px -7px black;
+	   -moz-box-shadow: 0 4px 10px -7px black;
+            box-shadow: 0 4px 10px -7px black;
+}
+
+.option-buttons{
+    background: white;
+    width: 180px;
+    font-size: 18px;
+    padding: 10px;
+    border: .95px solid #b2b2b2;
 }
