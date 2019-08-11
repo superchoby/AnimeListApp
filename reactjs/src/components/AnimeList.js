@@ -87,16 +87,16 @@ class AnimeList extends React.Component {
      * @summary function to pass down as props so when 
      * an anime checkbox is filled they are added
      * to list of anime's name to delete
-     * @param {string} animeToDeleteName - Name of anime to delete
+     * @param {string} animeToDelete - Object containing the anime to delete's info
      * @param {boolean} addToList - Determines whether or not the anime's name  
      * should be added or removed from the list depending on if the
      * anime has been checkmarked or uncheckmarked
      */
-    addToDeleteList = (animeToDeleteName, addToList) =>{
+    addToDeleteList = (animeToDelete, addToList) =>{
         if(addToList){
-            this.animeToDelete.push(animeToDeleteName);
+            this.animeToDelete.push(animeToDelete);
         }else{
-            this.animeToDelete.splice(this.animeToDelete.indexOf(animeToDeleteName), 1);
+            this.animeToDelete.splice(this.animeToDelete.indexOf(animeToDelete), 1);
         }
     }
 
@@ -105,11 +105,31 @@ class AnimeList extends React.Component {
      * @summary final delete function that actually deletes the anime
      */
     deleteRows = () =>{
+        let animeToDeleteNames = []
+        for(let i=0; i<this.animeToDelete.length; i++){
+            animeToDeleteNames.push(this.animeToDelete[i].Name)
+        }
         let filteredArray = this.state.anime_info.filter(anime =>{
             // filters out all anime who's name matches the anime to delete
             // only one should be selected as names are unique
-            return !this.animeToDelete.includes(anime.Name)
+            return !animeToDeleteNames.includes(anime.Name)
         })
+        
+        for (let i=0; i<this.animeToDelete.length; i++){
+            let url = 'http://127.0.0.1:8000/animes/v1/anime/' + this.animeToDelete[i].id + '/';
+            console.log(url)
+            axios.delete(url,
+            {
+                headers: this.headers,
+            })
+            .then(res =>{
+                console.log('good')
+            })
+            .catch(err =>{
+                console.log('bad')
+            })
+        }
+        
 
         for (let i=0; i<filteredArray.length; i++){
             filteredArray[i].number = i+1;
@@ -195,7 +215,6 @@ class AnimeList extends React.Component {
                 Overall_Rating: document.getElementById('overall-rating-input').value ? document.getElementById('overall-rating-input').value : null,
                 username: this.props.username,
             }
-            console.log(newAnime)
             axios.post('http://127.0.0.1:8000/animes/v1/anime/', 
             newAnime,
             {
@@ -434,10 +453,17 @@ class AnimeList extends React.Component {
                     <thead>
                         <tr>
                             {this.state.deleteCheckboxHeader}
-                            <th>&nbsp;&nbsp;#&nbsp;&nbsp;</th>
-                            <th>&nbsp;Cover&nbsp;</th>
-                            <th id='name-category'>Name</th>
-                            <th>Personal Thoughts/Reaction</th>
+                            <th className='numberOrderCol'>&nbsp;&nbsp;#&nbsp;&nbsp;</th>
+                            <th className='coverCol'>&nbsp;Cover&nbsp;</th>
+                            <th className='nameCol' id='name-category'>Name</th>
+
+
+                            {/* DO TEXT-OVERFLOW: ELLISPIS */}
+                            <th className='personalThoughtsCol'>Personal Thoughts</th>
+
+
+
+
                             <th>Overall Rating</th>
                             {/* <th>OST Rating</th> */}
                             <th>OP Rating</th>
@@ -448,7 +474,7 @@ class AnimeList extends React.Component {
                         </tr>
                     </thead>
 
-                    <tbody id='anime-rows'>
+                    <tbody id='anime-rows' style={{marginTop: '20px'}}>
                         {this.state.anime_rows}
                     </tbody>
 

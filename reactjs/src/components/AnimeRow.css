@@ -39,6 +39,17 @@ textarea{
     width: 25px;
 }
 
+#personalThoughts{
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+#personalThoughts:hover {
+    text-overflow: clip;
+    white-space: normal;
+    overflow: visible;
+}
 @font-face {
     font-family: "Segoe UI";
     src: url("../fonts/SegoeUI.woff") format('woff');

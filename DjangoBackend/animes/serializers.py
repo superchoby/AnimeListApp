@@ -8,5 +8,6 @@ class AnimeSerializer(ModelSerializer):
         fields = (
         'Name', 
         'cover', 
+        'id',
         'data',
         )

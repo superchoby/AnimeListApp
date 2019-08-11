@@ -30,5 +30,3 @@ class AnimeView(mixins.RetrieveModelMixin,
         )
         serializer = AnimeSerializer(anime)
         return Response(serializer.data)
-
-    
