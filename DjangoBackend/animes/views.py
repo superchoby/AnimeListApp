@@ -9,7 +9,6 @@ class AnimeView(mixins.RetrieveModelMixin,
                     mixins.CreateModelMixin,
                     mixins.UpdateModelMixin,
                     mixins.DestroyModelMixin,
-                    mixins.ListModelMixin,
                     viewsets.GenericViewSet): 
     model = Anime
     serializer_class = AnimeSerializer

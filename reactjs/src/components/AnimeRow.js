@@ -21,6 +21,7 @@ const mapStateToProps = state => {
     };
 }
 
+let isFirstRow = true;
 
 class AnimeRow extends React.Component{
     /**
@@ -34,7 +35,7 @@ class AnimeRow extends React.Component{
              dateFinished: '',
              row: '',
              personalThoughtsTD: 
-             <td className='personalThoughtsCol' id='personalThoughts' onMouseOver={this.handleReactionHover} onMouseOut={this.handleReactionMouseOut}>
+             <td className='personalThoughtsCol anime-table-data' id='personalThoughts' /*onMouseOver={this.handleReactionHover}*/ /*onMouseOut={this.handleReactionMouseOut}*/>
                 {this.props.animeInfo.Personal_Thoughts}
              </td>,
         }
@@ -55,7 +56,7 @@ class AnimeRow extends React.Component{
     handleReactionMouseOut = e =>{
         this.setState({
             personalThoughtsTD: 
-            <td className='personalThoughtsCol' id='personalThoughts' onMouseOver={this.handleReactionHover} onMouseOut={this.handleReactionMouseOut}>
+            <td className='personalThoughtsCol anime-table-data' id='personalThoughts' /*onMouseOver={this.handleReactionHover}*/ onMouseOut={this.handleReactionMouseOut}>
                 {this.props.animeInfo.Personal_Thoughts}
             </td>,
         })
@@ -139,30 +140,30 @@ class AnimeRow extends React.Component{
 
             let deleteCheckbox = shouldPrepareToDelete[shouldPrepareToDelete.length-1] 
             ? 
-            <td><input onClick={this.handleDeleteBoxCheck} type="checkbox" /></td> 
+            <td><input onClick={this.handleDeleteBoxCheck} className='anime-table-data' type="checkbox" /></td> 
             : 
             <td style={{display:'none'}}></td>;
 
-            this.row = <tr id='anime-info-row'>
+            this.row = <tr className='anime-info-row'>
                         {deleteCheckbox}
-                        <td className='numberOrderCol'>{this.props.animeInfo.number}</td>
-                        <td onClick={this.prepareUpdate} className='coverCol'>{this.props.animeInfo.cover}</td>
-                        <td className='nameCol'>{this.props.animeInfo.Name}</td>
+                        <td className='numberOrderCol anime-table-data'>{this.props.animeInfo.number}</td>
+                        <td onClick={this.prepareUpdate} className='coverCol anime-table-data'>{this.props.animeInfo.cover}</td>
+                        <td className='nameCol anime-table-data'>{this.props.animeInfo.Name}</td>
                         {this.state.personalThoughtsTD}
-                        <td>{this.props.animeInfo.Overall_Rating}</td>
+                        <td className='overallRatingCol anime-table-data'>{this.props.animeInfo.Overall_Rating}</td>
                         {/* <td>{this.props.animeInfo.ost_rating}</td> */}
-                        <td>{this.props.animeInfo.OP_Rating}</td>
+                        <td className='opRatingCol anime-table-data'>{this.props.animeInfo.OP_Rating}</td>
                         {/* <td>{this.props.animeInfo.ed_rating}</td> */}
-                        <td>{dateStarted}</td>
-                        <td>{dateFinished}</td>
+                        <td className = 'anime-table-data'>{dateStarted}</td>
+                        <td className = 'anime-table-data'>{dateFinished}</td>
                     </tr>
             
         }else{
-            this.row =  <tr id='anime-info-row'>
+            this.row =  <tr className='anime-info-row'>
                             <td style={{fontSize: '14px'}}>{this.props.rowNumber}</td>
                             <td><input id='cover-filler' placeholder='filler'></input></td>
                             <td><input id='title-input' placeholder='title'></input></td>
-                            <td><textarea id='self_description_data_input' rows='9' cols='55' ></textarea></td>
+                            <td><textarea id='self_description_data_input' rows='9' ></textarea></td>
                             <td><input id='overall-rating-input' type='number' min='0' max='10' step='.5' onChange={this.handleNumberChange} className='number-input'></input></td>
                             {/* <td>{this.props.animeInfo.ost_rating}</td> */}
                             <td><input id='op-rating-input' type='number' min='0' max='10' step='.5' onChange={this.handleNumberChange} className='number-input'></input></td>
@@ -173,8 +174,17 @@ class AnimeRow extends React.Component{
         }   
     }
 
+    componentDidMount(){
+        if(isFirstRow){
+            for(let i=0; i<document.getElementsByClassName('anime-info-row')[0].getElementsByTagName('TD').length; i++){
+                document.getElementsByClassName('anime-info-row')[0].getElementsByTagName('TD')[i].classList.add('first-row-td');
+            }            
+            isFirstRow = false;
+        }
+    }
+
     render(){
-        this.handleRowCreationOrUpdate()
+        this.handleRowCreationOrUpdate();
         return(
             <React.Fragment>
                 {this.row}

@@ -13,7 +13,7 @@ textarea{
     width: 68px;
 }
 
-#anime-info-row{
+.anime-info-row{
     background: #F4F4F4;
     font-size: 18px;
     font-family: 'Segoe UI'
@@ -50,6 +50,19 @@ textarea{
     white-space: normal;
     overflow: visible;
 }
+
+.first-row-td{
+    padding-top: 35px;
+}
+
+.anime-table-data{
+    padding-bottom: 20px;
+}
+
+textarea{
+    width: 100%;
+}
+
 @font-face {
     font-family: "Segoe UI";
     src: url("../fonts/SegoeUI.woff") format('woff');

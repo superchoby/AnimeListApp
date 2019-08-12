@@ -176,12 +176,12 @@ class AnimeList extends React.Component {
     addRows = () =>{
         if(this.state.anime_rows){
             this.setState({
-                addNewAnimeTableRow: <Row createNewRow={true} rowNumber={this.state.anime_rows.length + 1} />,
+                addNewAnimeTableRow: <Row createNewRow={true} animeInfo={{}} rowNumber={this.state.anime_rows.length + 1} />,
                 addOrSubmit: <button id='submit-anime-row' onClick={this.handleRowSubmit}>submit</button>,
             })
         }else{
             this.setState({
-                addNewAnimeTableRow: <Row createNewRow={true} rowNumber={1} />,
+                addNewAnimeTableRow: <Row createNewRow={true} animeInfo={{}} rowNumber={1} />,
                 addOrSubmit: <button id='submit-anime-row' onClick={this.handleRowSubmit}>submit</button>,
             })
         }
@@ -339,7 +339,7 @@ class AnimeList extends React.Component {
             const firstAnimeObject = animeInfo[0];
             //creates category options array
             for(let i=0; i<Object.keys(firstAnimeObject).length; i++){
-                if(Object.keys(firstAnimeObject)[i] !== 'Personal_Thoughts' && Object.keys(firstAnimeObject)[i] !== 'cover'){
+                if(Object.keys(firstAnimeObject)[i] !== 'Personal_Thoughts' && Object.keys(firstAnimeObject)[i] !== 'cover' && Object.keys(firstAnimeObject)[i] !== 'username' && Object.keys(firstAnimeObject)[i] !== 'id'){
                     categoryOptions.push(Object.keys(firstAnimeObject)[i]);
                 }
             }
@@ -431,8 +431,10 @@ class AnimeList extends React.Component {
             <div id='anime-list'>
 
                 <div id='welcome-sign'>
-                    <h1>MitaAnime</h1>
-                    <h2>e youkouso!</h2>
+                    <div id='banner'>
+                        <h1>AnimeLog</h1>
+                        <h2>e youkouso!</h2>
+                    </div>
                     <div id='category-title'>
                         <p id='current-filter'>Currently ordered by {this.state.currentCategory}</p>
                         <div id='button-options'>
@@ -456,20 +458,13 @@ class AnimeList extends React.Component {
                             <th className='numberOrderCol'>&nbsp;&nbsp;#&nbsp;&nbsp;</th>
                             <th className='coverCol'>&nbsp;Cover&nbsp;</th>
                             <th className='nameCol' id='name-category'>Name</th>
-
-
-                            {/* DO TEXT-OVERFLOW: ELLISPIS */}
                             <th className='personalThoughtsCol'>Personal Thoughts</th>
-
-
-
-
-                            <th>Overall Rating</th>
+                            <th className='overallRatingCol'>Overall Rating</th>
                             {/* <th>OST Rating</th> */}
-                            <th>OP Rating</th>
+                            <th className='opRatingCol'>OP Rating</th>
                             {/* <th>ED Rating</th> */}
-                            <th>Date Started</th>
-                            <th>Date Finished</th>
+                            <th className='dateStartCol'>Date Started</th>
+                            <th className='dateFinishCol'>Date Finished</th>
                             {/* <th>Add/Remove a Category</th> */}
                         </tr>
                     </thead>
