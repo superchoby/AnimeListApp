@@ -4,16 +4,8 @@
  import { Button, View, Text, TextInput, StyleSheet } from 'react-native';
  import { Actions } from 'react-native-router-flux';
  import axios from 'axios';
- 
- 
- class LoginOrCreateForm extends Component {
-  //  state = {
-  //    username: '',
-  //    password: '',
-  //    firstName: '',
-  //    lastName: ''
-  //  }
 
+ class LoginOrCreateForm extends Component {
   state = {
     username: '',
     password: '',
@@ -59,40 +51,10 @@
    onPasswordChange(text) {
      this.setState({ password: text });
    }
- 
-  //  onFirstNameChange(text) {
-  //    this.setState({ firstName: text });
-  //  }
- 
-  //  onLastNameChange(text) {
-  //    this.setState({ lastName: text });
-  //  }
 
   onEmailChange(text){
     this.setState({ email: text });
   }
- 
-  //  renderCreateForm() {
-  //    const { fieldStyle, textInputStyle } = style;
-  //    if (this.props.create) {
-  //      return (
-  //          <View style={fieldStyle}>
-  //            <TextInput
-  //              placeholder="First name"
-  //              autoCorrect={false}
-  //              onChangeText={this.onFirstNameChange.bind(this)}
-  //              style={textInputStyle}
-  //            />
-  //            <TextInput
-  //              placeholder="Last name"
-  //              autoCorrect={false}
-  //              onChangeText={this.onLastNameChange.bind(this)}
-  //              style={textInputStyle}
-  //            />
-  //          </View>
-  //      );
-  //    }
-  //  }
 
   renderCreateForm() {
     const { fieldStyle, textInputStyle } = style;

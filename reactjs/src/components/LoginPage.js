@@ -95,21 +95,20 @@ class LoginPage extends Component {
   render() {
     let redirectComponent = this.state.redirect ? <Redirect to='/view-list' /> : <p style={{display: 'none'}}></p>
     return (
-      <React.Fragment>
+      <div id='login-whole-page-div'>
         {redirectComponent}
         <form id='login-form' onSubmit={this.handleSubmit}>
-          <div id='username-input-login'>
+          <div id='username-input-login' className='login-input-divs'>
             <label>Username:</label>
             <input className='login-input' type='text' onChange={this.updateUsernameChange} />
           </div>
-          <div id='password-input-login'>
+          <div id='password-input-login' className='login-input-divs'>
             <label>Password:</label>
             <input className='login-input' type='password' onChange={this.updatePasswordChange} />
           </div>
-          
-          <input type='submit' value='Submit' />
+          <input id='login-submit-button' type='submit' value='Submit' />
         </form>
-      </React.Fragment>
+      </div>
     );
   }
 }
