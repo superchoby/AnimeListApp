@@ -1,0 +1,36 @@
+#login-form{
+    height: 400px;
+    width: 400px;
+    background: blue;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.login-input{
+    margin: 10px;
+    border: none;
+    height: 35px;
+    width: 300px;
+    border-radius: 5px;
+}
+
+#username-input-login{
+    height: 50px;
+}
+
+#username-input-login label{
+    display: block;
+}
+
+#username-input-login input{
+    display: block;
+}
+
+#password-input-login label{
+    display: block;
+}
+
+#password-input-login input{
+    display: block;
+}

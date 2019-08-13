@@ -140,7 +140,7 @@ class AnimeRow extends React.Component{
 
             let deleteCheckbox = shouldPrepareToDelete[shouldPrepareToDelete.length-1] 
             ? 
-            <td><input onClick={this.handleDeleteBoxCheck} className='anime-table-data' type="checkbox" /></td> 
+            <td className='deleteCheckboxCol'><input onClick={this.handleDeleteBoxCheck} className='anime-table-data' type="checkbox" /></td> 
             : 
             <td style={{display:'none'}}></td>;
 
@@ -164,9 +164,9 @@ class AnimeRow extends React.Component{
                             <td><input id='cover-filler' placeholder='filler'></input></td>
                             <td><input id='title-input' placeholder='title'></input></td>
                             <td><textarea id='self_description_data_input' rows='9' ></textarea></td>
-                            <td><input id='overall-rating-input' type='number' min='0' max='10' step='.5' onChange={this.handleNumberChange} className='number-input'></input></td>
+                            <td><input id='overall-rating-input' type='number' min='0' max='10' step='.1' onChange={this.handleNumberChange} className='number-input'></input></td>
                             {/* <td>{this.props.animeInfo.ost_rating}</td> */}
-                            <td><input id='op-rating-input' type='number' min='0' max='10' step='.5' onChange={this.handleNumberChange} className='number-input'></input></td>
+                            <td><input id='op-rating-input' type='number' min='0' max='10' step='.1' onChange={this.handleNumberChange} className='number-input'></input></td>
                             {/* <td>{this.props.animeInfo.ed_rating}</td> */}
                             <td><input id='date-start-input' className='date-input' placeholder='MM/DD/YYYY'></input></td>
                             <td><input id='date-end-input' className='date-input' placeholder='MM/DD/YYYY'></input></td>
@@ -185,6 +185,7 @@ class AnimeRow extends React.Component{
 
     render(){
         this.handleRowCreationOrUpdate();
+        console.log('alksd')
         return(
             <React.Fragment>
                 {this.row}

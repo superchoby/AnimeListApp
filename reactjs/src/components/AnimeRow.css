@@ -65,5 +65,5 @@ textarea{
 
 @font-face {
     font-family: "Segoe UI";
-    src: url("../fonts/SegoeUI.woff") format('woff');
+    src: url("../fonts/SegoeUI.woff");
 }

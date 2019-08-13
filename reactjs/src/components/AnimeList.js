@@ -61,7 +61,7 @@ class AnimeList extends React.Component {
             category_sort_rows_options: [],
             currentCategory: 'Time Entered',
             addNewAnimeTableRow: '',
-            addOrSubmit: <div id='add-anime-icon' className='add-icon' onClick={this.addRows}>&#43;</div>,
+            addOrSubmit: <button id='add-anime-icon' className='add-or-submit-button' onClick={this.addRows}>Add new row</button>,
             deleteCheckboxHeader: <td style={{display: 'none'}}></td>,
         }
         this.changeOrder = this.changeOrder.bind(this);
@@ -152,13 +152,17 @@ class AnimeList extends React.Component {
      * @param {event} e - paramter that gets passed in button click 
      */
     handleDeleteButtonSubmit = e =>{
+        //decreases the left padding of the number column when delete checkboxes show
+        let numberColumnsArray = Array.from(document.getElementsByClassName('numberOrderCol'));
+        for (let i=0; i<numberColumnsArray.length; i++){
+            numberColumnsArray[i].classList.toggle('numberOrderColDuringDelete');
+        }
         if(document.getElementById('delete-button').innerHTML === 'Delete'){
             document.getElementById('delete-button').innerHTML = 'Confirm';
             this.props.prepareToDelete(true);
-            // this.props.startDeletingProcess(false);
             this.setState({
                 //adds an extra empty table header for the delete checkboxesy
-                deleteCheckboxHeader: <th></th>,
+                deleteCheckboxHeader: <th className='deleteCheckboxCol'></th>,
             })
         }else{// the innerHTML === 'Confirm'
             document.getElementById('delete-button').innerHTML = 'Delete';
@@ -177,12 +181,12 @@ class AnimeList extends React.Component {
         if(this.state.anime_rows){
             this.setState({
                 addNewAnimeTableRow: <Row createNewRow={true} animeInfo={{}} rowNumber={this.state.anime_rows.length + 1} />,
-                addOrSubmit: <button id='submit-anime-row' onClick={this.handleRowSubmit}>submit</button>,
+                addOrSubmit: <button id='submit-anime-row' className='add-or-submit-button' onClick={this.handleRowSubmit}>submit</button>,
             })
         }else{
             this.setState({
                 addNewAnimeTableRow: <Row createNewRow={true} animeInfo={{}} rowNumber={1} />,
-                addOrSubmit: <button id='submit-anime-row' onClick={this.handleRowSubmit}>submit</button>,
+                addOrSubmit: <button id='submit-anime-row' className='add-or-submit-button' onClick={this.handleRowSubmit}>submit</button>,
             })
         }
     }
@@ -238,7 +242,7 @@ class AnimeList extends React.Component {
             let newAnimeArray = this.state.anime_info ? this.state.anime_info : []
             newAnimeArray.push(newAnime);
             this.setState({
-                addOrSubmit: <div id='add-anime-icon' className='add-icon' onClick={this.addRows}>&#43;</div>,
+                addOrSubmit: <div id='add-anime-icon' className='add-or-submit-button' onClick={this.addRows}>&#43;</div>,
                 addNewAnimeTableRow: '',
                 anime_info: newAnimeArray,
             }, function(){
@@ -248,7 +252,7 @@ class AnimeList extends React.Component {
             this.setState({
                 addOrSubmit: 
                     <React.Fragment>
-                        <button id='submit-anime-row' onClick={this.handleRowSubmit}>submit</button>
+                        <button id='submit-anime-row' className='add-or-submit-button' onClick={this.handleRowSubmit}>submit</button>
                         <div style={{textAlign: 'center'}}>The name is required.</div>
                     </React.Fragment>
             })
@@ -400,6 +404,9 @@ class AnimeList extends React.Component {
      * request to the server and with the info creates the user's anime table
      */
     componentDidMount(){
+        if(document.getElementById('delete-button').innerHTML === 'Delete'){
+            this.props.prepareToDelete(false);
+        }
         axios.get('http://127.0.0.1:8000/users/v1/user/',
         {
             headers: this.headers,
@@ -421,7 +428,7 @@ class AnimeList extends React.Component {
             })
         })
         .catch(error => {
-            console.log('There was an error blue');
+            console.log('There was an error');
         })
 
     }
@@ -432,8 +439,8 @@ class AnimeList extends React.Component {
 
                 <div id='welcome-sign'>
                     <div id='banner'>
-                        <h1>AnimeLog</h1>
-                        <h2>e youkouso!</h2>
+                        <h1>Welcome to AnimeLog</h1>
+                        <h2>Happy to see you!</h2>
                     </div>
                     <div id='category-title'>
                         <p id='current-filter'>Currently ordered by {this.state.currentCategory}</p>

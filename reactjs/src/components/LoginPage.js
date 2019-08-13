@@ -3,6 +3,7 @@ import axios from 'axios';
 import { storeToken, storeUsername } from '../actions/index';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
+import './LoginPage.css';
 
 /**
  * @file LoginPage is a React Component that handles user authentication
@@ -96,15 +97,16 @@ class LoginPage extends Component {
     return (
       <React.Fragment>
         {redirectComponent}
-        <form onSubmit={this.handleSubmit}>
-          <label>
-            Username:
-            <input type='text' onChange={this.updateUsernameChange} />
-          </label>
-          <label>
-            Password:
-            <input type='password' onChange={this.updatePasswordChange} />
-          </label>
+        <form id='login-form' onSubmit={this.handleSubmit}>
+          <div id='username-input-login'>
+            <label>Username:</label>
+            <input className='login-input' type='text' onChange={this.updateUsernameChange} />
+          </div>
+          <div id='password-input-login'>
+            <label>Password:</label>
+            <input className='login-input' type='password' onChange={this.updatePasswordChange} />
+          </div>
+          
           <input type='submit' value='Submit' />
         </form>
       </React.Fragment>
