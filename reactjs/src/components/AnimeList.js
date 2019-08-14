@@ -3,7 +3,7 @@ import './AnimeList.css';
 import axios from 'axios';
 import Row from './AnimeRow';
 import { connect } from 'react-redux';
-import { prepareToDelete } from '../actions/index';
+import { prepareToDelete, storeOrderChangedOrReversed } from '../actions/index';
 
 /**
  * @file AnimeList is a React Component that let's the user see
@@ -27,6 +27,7 @@ import { prepareToDelete } from '../actions/index';
 function mapDispatchToProps(dispatch) {
     return {
         prepareToDelete: shouldPrepareToDelete => dispatch(prepareToDelete(shouldPrepareToDelete)),
+        storeOrderChangedOrReversed: orderChangedOrReversed => dispatch(storeOrderChangedOrReversed(orderChangedOrReversed)),
     }
 }
 
@@ -63,6 +64,7 @@ class AnimeList extends React.Component {
             addNewAnimeTableRow: '',
             addOrSubmit: <button id='add-anime-icon' className='add-or-submit-button' onClick={this.addRows}>Add new row</button>,
             deleteCheckboxHeader: <td style={{display: 'none'}}></td>,
+            cancelButton: <td style={{display: 'none'}}></td>,
         }
         this.changeOrder = this.changeOrder.bind(this);
         this.createRows = this.createRows.bind(this);
@@ -74,12 +76,20 @@ class AnimeList extends React.Component {
         this.handleDeleteButtonSubmit = this.handleDeleteButtonSubmit.bind(this);
         this.deleteRows = this.deleteRows.bind(this);
         this.addToDeleteList = this.addToDeleteList.bind(this);
-        
+        this.cancelAdd = this.cancelAdd.bind(this);
         this.animeToDelete = [];
         this.headers = {
             'Content-Type': 'application/json',
             'Authorization': 'Token ' + this.props.token,
         }
+    }
+
+    cancelAdd = e =>{
+        this.setState({
+            addOrSubmit: <button id='add-anime-icon' className='add-or-submit-button' onClick={this.addRows}>Add new row</button>,
+            addNewAnimeTableRow: '',
+            cancelButton: <td style={{display: 'none'}}></td>,
+        })
     }
 
     /**
@@ -117,7 +127,6 @@ class AnimeList extends React.Component {
         
         for (let i=0; i<this.animeToDelete.length; i++){
             let url = 'http://127.0.0.1:8000/animes/v1/anime/' + this.animeToDelete[i].id + '/';
-            console.log(url)
             axios.delete(url,
             {
                 headers: this.headers,
@@ -130,7 +139,6 @@ class AnimeList extends React.Component {
             })
         }
         
-
         for (let i=0; i<filteredArray.length; i++){
             filteredArray[i].number = i+1;
         }
@@ -181,12 +189,14 @@ class AnimeList extends React.Component {
         if(this.state.anime_rows){
             this.setState({
                 addNewAnimeTableRow: <Row createNewRow={true} animeInfo={{}} rowNumber={this.state.anime_rows.length + 1} />,
-                addOrSubmit: <button id='submit-anime-row' className='add-or-submit-button' onClick={this.handleRowSubmit}>submit</button>,
+                addOrSubmit: <button className='add-or-submit-button' onClick={this.handleRowSubmit}>submit</button>,
+                cancelButton: <button id='add-anime-icon' className='add-or-submit-button' onClick={this.cancelAdd}>cancel</button>,
             })
         }else{
             this.setState({
                 addNewAnimeTableRow: <Row createNewRow={true} animeInfo={{}} rowNumber={1} />,
-                addOrSubmit: <button id='submit-anime-row' className='add-or-submit-button' onClick={this.handleRowSubmit}>submit</button>,
+                addOrSubmit: <button className='add-or-submit-button' onClick={this.handleRowSubmit}>submit</button>,
+                cancelButton: <button id='add-anime-icon' className='add-or-submit-button' onClick={this.cancelAdd}>cancel</button>,
             })
         }
     }
@@ -237,14 +247,13 @@ class AnimeList extends React.Component {
             document.getElementById('date-end-input').value = '';
             document.getElementById('op-rating-input').value = 0;
             document.getElementById('overall-rating-input').value = 0;
-            // console.log(this.state.anime_info)
-            // let newAnimeArray = this.state.anime_info;
             let newAnimeArray = this.state.anime_info ? this.state.anime_info : []
             newAnimeArray.push(newAnime);
             this.setState({
-                addOrSubmit: <div id='add-anime-icon' className='add-or-submit-button' onClick={this.addRows}>&#43;</div>,
+                addOrSubmit: <button id='add-anime-icon' className='add-or-submit-button' onClick={this.addRows}>Add new row</button>,
                 addNewAnimeTableRow: '',
                 anime_info: newAnimeArray,
+                cancelButton: <td style={{display: 'none'}}></td>,
             }, function(){
                 this.createRows(this.state.anime_info)
             })
@@ -252,7 +261,7 @@ class AnimeList extends React.Component {
             this.setState({
                 addOrSubmit: 
                     <React.Fragment>
-                        <button id='submit-anime-row' className='add-or-submit-button' onClick={this.handleRowSubmit}>submit</button>
+                        <button className='add-or-submit-button' onClick={this.handleRowSubmit}>submit</button>
                         <div style={{textAlign: 'center'}}>The name is required.</div>
                     </React.Fragment>
             })
@@ -265,6 +274,7 @@ class AnimeList extends React.Component {
      * @param {event} e - The event paramter passed when button is clicked
      */
     handleReverse = e =>{
+        this.props.storeOrderChangedOrReversed(true);
         document.getElementById('reverse-button').innerHTML = document.getElementById('reverse-button').innerHTML === 'Reverse' ? 'Revert' : 'Reverse';
         this.setState({
             anime_rows: this.state.anime_rows.reverse(),
@@ -293,6 +303,7 @@ class AnimeList extends React.Component {
      */
     changeOrder(e){
         document.getElementById('reverse-button').innerHTML = 'Reverse';
+        this.props.storeOrderChangedOrReversed(true);
         if(e.target.value){
             let category = e.target.value.split(' ');
             category = category.join('_');
@@ -316,12 +327,10 @@ class AnimeList extends React.Component {
                     }
                 }else{
                     return parseFloat(secondAnime[category]) - parseFloat(firstAnime[category]);
-                    // return parseFloat(firstAnime[category]) - parseFloat(secondAnime[category]);
                 }
             })
             this.createRows(sortedByCategoryAnimeInfoList, e.target.value)
         }else{
-            // console.log(this.state.anime_info)
             this.createRows(this.state.anime_info)
         }   
     }
@@ -341,6 +350,7 @@ class AnimeList extends React.Component {
             let categoryOptions = [];
             let copyList = [];
             const firstAnimeObject = animeInfo[0];
+            let animeAmount = animeInfo.length
             //creates category options array
             for(let i=0; i<Object.keys(firstAnimeObject).length; i++){
                 if(Object.keys(firstAnimeObject)[i] !== 'Personal_Thoughts' && Object.keys(firstAnimeObject)[i] !== 'cover' && Object.keys(firstAnimeObject)[i] !== 'username' && Object.keys(firstAnimeObject)[i] !== 'id'){
@@ -362,13 +372,15 @@ class AnimeList extends React.Component {
 
             categoryOptions.unshift(<option key='none' value=''>none</option>)
 
-            for(let i=0; i<animeInfo.length; i++){
+            for(let i=0; i<animeAmount; i++){
                 animeInfo[i]['number'] = i + 1;
                 copyList.push(Object.assign({}, animeInfo[i]))
             }
 
+            
+
             let tempAnimeList = animeInfo.map((anime)=>
-                <Row addToDeleteList={this.addToDeleteList} createNewRow={false} key={anime.Name} animeInfo={anime} />
+                <Row addToDeleteList={this.addToDeleteList} animeAmount={animeAmount} createNewRow={false} key={anime.Name} animeInfo={anime} />
             )
 
             if(this.firstTimeLoading){
@@ -430,7 +442,6 @@ class AnimeList extends React.Component {
         .catch(error => {
             console.log('There was an error');
         })
-
     }
     
     render() {
@@ -480,12 +491,17 @@ class AnimeList extends React.Component {
                         {this.state.anime_rows}
                     </tbody>
 
-                    <tbody id='add-row'>
+                    <tbody className='add-row'>
                         {this.state.addNewAnimeTableRow}
                     </tbody>
                     
                 </table>
-                {this.state.addOrSubmit}
+
+                <div id='buttons-div'>
+                    {this.state.addOrSubmit}
+                    {this.state.cancelButton}
+                </div>
+
             </div>
             //</React.Fragment>
         )

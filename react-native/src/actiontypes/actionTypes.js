@@ -1,0 +1,3 @@
+export const PREPARE_TO_DELETE = 'PREPARE_TO_DELETE'
+export const STORE_TOKEN = 'STORE_TOKEN'
+export const STORE_USERNAME = 'STORE_USERNAME'

@@ -18,11 +18,12 @@ import { connect } from 'react-redux';
 const mapStateToProps = state => {
     return { 
         shouldPrepareToDelete: state.shouldPrepareToDelete,
+        orderChangedOrReversed: state.orderChangedOrReversed,
     };
 }
 
-let isFirstRow = true;
-
+// let animeCount = 0;
+let firstRow = '';
 class AnimeRow extends React.Component{
     /**
      * @constructor
@@ -174,18 +175,52 @@ class AnimeRow extends React.Component{
         }   
     }
 
-    componentDidMount(){
-        if(isFirstRow){
+    componentDidUpdate(){
+        // if(animeCount === 0){
+        //     console.log('wutup')
+        //     if (firstRow){
+        //         console.log('yo')
+        //         for(let i=0; i<firstRow.getElementsByTagName('TD').length; i++){
+        //             firstRow.getElementsByTagName('TD')[i].classList.remove('first-row-td');
+        //         }
+        //     }
+
+        //     for(let i=0; i<document.getElementsByClassName('anime-info-row')[0].getElementsByTagName('TD').length; i++){
+        //         document.getElementsByClassName('anime-info-row')[0].getElementsByTagName('TD')[i].classList.add('first-row-td');
+        //     }
+
+        //     firstRow = document.getElementsByClassName('anime-info-row')[0];            
+        //     animeCount++;
+        // }else if(animeCount === this.props.animeAmount){
+        //     animeCount = 0;
+        // }else{
+        //     animeCount++;
+        // }
+        let orderChangedOrReversed = this.props.orderChangedOrReversed;
+        console.log(this.props)
+        if(orderChangedOrReversed[orderChangedOrReversed.length-1]){
+            if (firstRow){
+                for(let i=0; i<firstRow.getElementsByTagName('TD').length; i++){
+                    firstRow.getElementsByTagName('TD')[i].classList.remove('first-row-td');
+                }
+            }
             for(let i=0; i<document.getElementsByClassName('anime-info-row')[0].getElementsByTagName('TD').length; i++){
                 document.getElementsByClassName('anime-info-row')[0].getElementsByTagName('TD')[i].classList.add('first-row-td');
-            }            
-            isFirstRow = false;
+            }
+            firstRow = document.getElementsByClassName('anime-info-row')[0];            
         }
     }
 
+    componentDidMount(){
+        for(let i=0; i<document.getElementsByClassName('anime-info-row')[0].getElementsByTagName('TD').length; i++){
+            document.getElementsByClassName('anime-info-row')[0].getElementsByTagName('TD')[i].classList.add('first-row-td');
+        }
+        firstRow = document.getElementsByClassName('anime-info-row')[0];            
+    }
+
     render(){
+        
         this.handleRowCreationOrUpdate();
-        console.log('alksd')
         return(
             <React.Fragment>
                 {this.row}

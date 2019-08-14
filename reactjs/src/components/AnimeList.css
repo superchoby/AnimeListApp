@@ -59,8 +59,8 @@ form{
     text-align: center;
     height: 45px;
     width: 130px;
-    margin: 30px auto;
-    display: block;
+    margin: 30px 30px;
+    display: inline-block;
     border: none;
     border-radius: 5px;
     font-size: 18px;
@@ -74,7 +74,7 @@ form{
 }
 
 #submit-anime-row{
-    display: block;
+    display: inline-block;
     margin: 3px auto;
 }
 
@@ -169,4 +169,12 @@ thead tr th{
     margin: auto;
     color: white;
     font-size: 21px;
+}
+
+#buttons-div{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
 }
