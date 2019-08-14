@@ -1,17 +1,19 @@
 #category-title{
-    width: 90%;
+    width: 100%;
     text-align: center;
-    border-style: solid;
-    border-color: blue;
-    border-width: 1px;
-    margin-right: 0;
-    display: inline-block;
-    margin-top: 0;
+    position: absolute;
+    background-color: rgb(0, 0, 0, .6);
+    bottom: 0;
+    margin: 0;
+    float: left;
+    vertical-align: center;
 }
 
 table {
     border-collapse: collapse;
     border-spacing: 2px;
+    table-layout: fixed;
+    width: 100%;
 }
 
 #anime-rows{
@@ -19,45 +21,52 @@ table {
 }
 
 #anime-list{
-    margin: 0 auto;
-    margin-top: 70px;
-    /* width: auto; */
-    display: inline-block;
     padding: 0;
-    width: 900px;
+    width: 68%;
 }
 
 #current-filter{
     margin: 0;
     display: inline-block;
+    line-height: 42px;
+    color: white;
 }
 
 th, td{
-    /* border: 1px solid black; */
     text-align: center;
     border-collapse: collapse;
 }
 
 th{
-    font-size: 14px;
+    font-size: 18px;
     font-weight: normal;
 }
 
 #welcome-sign{
     text-align: center;
-    background-color: #0278FE;
-    margin-bottom: 0;
-    padding: 6px;
-    border-radius: 10px 10px 0 0;
+    margin: 0 auto;
+    position: relative;
     font-family: Sans-Serif;
+    height: 240px;
+    background-image: url("../images/animetreebackground.jpg");
 }
 
 form{
     display: inline-block;
 }
 
-.add-icon{
+.add-or-submit-button{
     text-align: center;
+    height: 45px;
+    width: 130px;
+    margin: 30px 30px;
+    display: inline-block;
+    border: none;
+    border-radius: 5px;
+    font-size: 18px;
+    color: white;
+    border: 1.6px solid white;
+    background:	#3022E7;
 }
 
 #button-options{
@@ -65,10 +74,107 @@ form{
 }
 
 #submit-anime-row{
-    display: block;
+    display: inline-block;
     margin: 3px auto;
 }
 
-thead{
-    background-color: #0278FE;
+thead tr{
+    background: white;
+    transform: scale(1);
+    -webkit-transform: scale(1);
+    -moz-transform: scale(1);
+    box-shadow: 0 4px 10px -6.8px black;
+    -webkit-box-shadow: 0 4px 10px -6.8px black;
+    -moz-box-shadow: 0 4px 10px -6.8px black;
+}
+
+thead tr th{
+    padding-top: 13px;
+    padding-bottom: 7px;
+}
+
+#category-dropdown select{
+    background: white;
+    padding: 10px;
+    width: 180px;
+    border: none;
+    border-bottom: .95px solid #b2b2b2;
+    font-size: 18px;
+    /* -webkit-box-shadow: 0 4px 10px 7px black;
+	   -moz-box-shadow: 0 4px 10px 7px black;
+            box-shadow: 0 4px 10px 7px black; */
+}
+
+.option-buttons{
+    background: white;
+    width: 180px;
+    font-size: 18px;
+    padding: 10px;
+    border: .95px solid #b2b2b2;
+}
+
+.numberOrderCol{
+    padding-left: 40px;
+    width: 5%;
+}
+
+.numberOrderColDuringDelete{
+    padding-left: 0px !important;
+    padding-right: 20px;
+}
+
+.coverCol{
+    width: 5%;
+}
+
+.nameCol{
+    width: 6%;
+}
+
+.personalThoughtsCol{
+    width: 14%;
+}
+
+.overallRatingCol{
+    width: 11%;
+}
+
+.opRatingCol{
+    width: 8%;
+}
+
+.dateStartCol{
+    width: 8%;
+}
+
+.dateFinishCol{
+    width: 7%;
+}
+
+.deleteCheckboxCol{
+    width: 6%;
+}
+
+#gap-row{
+    background: #F4F4F4;
+    height: 30px;
+}
+
+#banner{
+    position: absolute;
+    top: 10%;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    color: white;
+    font-size: 21px;
+}
+
+#buttons-div{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
 }

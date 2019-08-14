@@ -18,11 +18,12 @@ import { connect } from 'react-redux';
 const mapStateToProps = state => {
     return { 
         shouldPrepareToDelete: state.shouldPrepareToDelete,
+        orderChangedOrReversed: state.orderChangedOrReversed,
     };
 }
 
-let makeRowGray = false;
-
+// let animeCount = 0;
+let firstRow = '';
 class AnimeRow extends React.Component{
     /**
      * @constructor
@@ -34,16 +35,73 @@ class AnimeRow extends React.Component{
              dateStarted: '',
              dateFinished: '',
              row: '',
+             personalThoughtsTD: 
+             <td className='personalThoughtsCol anime-table-data' id='personalThoughts' /*onMouseOver={this.handleReactionHover}*/ /*onMouseOut={this.handleReactionMouseOut}*/>
+                {this.props.animeInfo.Personal_Thoughts}
+             </td>,
         }
         this.handleNumberChange = this.handleNumberChange.bind(this);
         this.handleRowCreationOrUpdate = this.handleRowCreationOrUpdate.bind(this);
         this.handleDeleteBoxCheck  = this.handleDeleteBoxCheck.bind(this);
-        this.prepareUpdate = this.prepareUpdate.bind(this);
+        this.dateConverter = this.dateConverter.bind(this);
+        this.handleReactionHover = this.handleReactionHover.bind(this);
+        this.handleReactionMouseOut = this.handleReactionMouseOut.bind(this);
     }
 
-    prepareUpdate = e =>{
-        console.log(e.target.contenteditable)
+    /**
+     * @method
+     * @summary Hides the personal thoughts section by changing the text overflow 
+     * to ellipsis
+     * @param {event} e - The parameter passed for functions triggered by events
+     */
+    handleReactionMouseOut = e =>{
+        this.setState({
+            personalThoughtsTD: 
+            <td className='personalThoughtsCol anime-table-data' id='personalThoughts' /*onMouseOver={this.handleReactionHover}*/ onMouseOut={this.handleReactionMouseOut}>
+                {this.props.animeInfo.Personal_Thoughts}
+            </td>,
+        })
     }
+
+    /**
+     * @method
+     * @summary Shows the entire information for the Personal Thoughts section
+     * when the user hovers the mouse over it
+     * @param {event} e - The parameter passed for functions triggered by events
+     */
+    handleReactionHover = e =>{
+        this.setState({
+            personalThoughtsTD: 
+            <td className='personalThoughtsCol' id='personalThoughts' onMouseOver={this.handleReactionHover} onMouseOut={this.handleReactionMouseOut}>
+                <br />
+                {this.props.animeInfo.Personal_Thoughts}
+                <br />
+                <br />
+            </td>,
+        })
+    }
+
+    /**
+     * @method
+     * @summary Converts the ISO date format from the server into
+     * MON DD, YYYY format for better readability
+     * @param {string} date - the date to be converted
+     * @return {string} The date converted to MON DD, YYYY format
+     */
+    dateConverter = date =>{
+        if(date !== null){
+            const shortMonths = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            let dateInst = new Date(date);
+            let month = shortMonths[dateInst.getMonth()];
+            let day = dateInst.getDate() < 10 ? '0' + dateInst.getDate().toString() : dateInst.getDate().toString();
+            let year = dateInst.getFullYear();
+            let finalDate = month + ' ' + day + ', ' + year;
+            return finalDate;
+        }else{
+            return '';
+        }
+    }
+
     /**
      * @method
      * @summary If during the deletion preparing state, the rows checkbox is clicked,
@@ -51,9 +109,9 @@ class AnimeRow extends React.Component{
      */
     handleDeleteBoxCheck = e =>{
         if(e.target.checked){
-            this.props.addToDeleteList(this.props.animeInfo.Name, true)
+            this.props.addToDeleteList(this.props.animeInfo, true)
         }else{
-            this.props.addToDeleteList(this.props.animeInfo.Name, false)
+            this.props.addToDeleteList(this.props.animeInfo, false)
         }
     }
 
@@ -76,85 +134,93 @@ class AnimeRow extends React.Component{
      */
     handleRowCreationOrUpdate = () =>{
         if(!this.props.createNewRow){
-            let split_date_started, split_date_finished, reformatted_date_started, reformatted_date_finished;
+            let dateStarted = this.dateConverter(this.props.animeInfo.Date_Started)
+            let dateFinished = this.dateConverter(this.props.animeInfo.Date_Finished)
 
-            if(this.props.animeInfo.Date_Started !== null){
-                split_date_started = this.props.animeInfo.Date_Started.split('-')
-                reformatted_date_started = `${split_date_started[1]}/${split_date_started[2]}/${split_date_started[0]}`;
-                if(split_date_started[0] === 'undefined'){
-                    reformatted_date_started = '';
-                }
-            }else{
-                reformatted_date_started = '';
-            }
-
-            if(this.props.animeInfo.Date_Finished !== null){
-                split_date_finished = this.props.animeInfo.Date_Finished.split('-')
-                reformatted_date_finished = `${split_date_finished[1]}/${split_date_finished[2]}/${split_date_finished[0]}`;
-                if(split_date_finished[0] === 'undefined'){
-                    reformatted_date_finished = '';
-                }
-            }else{
-                reformatted_date_finished = '';
-            }
-
-            let dateStarted = reformatted_date_started;
-            let dateFinished = reformatted_date_finished;
             let shouldPrepareToDelete = this.props.shouldPrepareToDelete;
 
-            let deleteCheckbox = shouldPrepareToDelete[shouldPrepareToDelete.length-1] ? <td><input onClick={this.handleDeleteBoxCheck} type="checkbox" /></td> 
+            let deleteCheckbox = shouldPrepareToDelete[shouldPrepareToDelete.length-1] 
+            ? 
+            <td className='deleteCheckboxCol'><input onClick={this.handleDeleteBoxCheck} className='anime-table-data' type="checkbox" /></td> 
             : 
             <td style={{display:'none'}}></td>;
 
-            if(makeRowGray){
-                this.row = <tr id='anime-info-row' className='gray'>
-                            {deleteCheckbox}
-                            <td>{this.props.animeInfo.number}</td>
-                            <td onClick={this.prepareUpdate}>{this.props.animeInfo.cover}</td>
-                            <td>{this.props.animeInfo.Name}</td>
-                            <td>{this.props.animeInfo.Personal_Thoughts}</td>
-                            <td>{this.props.animeInfo.Overall_Rating}</td>
-                            {/* <td>{this.props.animeInfo.ost_rating}</td> */}
-                            <td>{this.props.animeInfo.OP_Rating}</td>
-                            {/* <td>{this.props.animeInfo.ed_rating}</td> */}
-                            <td>{dateStarted}</td>
-                            <td>{dateFinished}</td>
-                        </tr>
-                makeRowGray = false;
-            }else{
-                this.row = <tr id='anime-info-row' className='white'>
-                            {deleteCheckbox}
-                            <td>{this.props.animeInfo.number}</td>
-                            <td>{this.props.animeInfo.cover}</td>
-                            <td>{this.props.animeInfo.Name}</td>
-                            <td>{this.props.animeInfo.Personal_Thoughts}</td>
-                            <td>{this.props.animeInfo.Overall_Rating}</td>
-                            {/* <td>{this.props.animeInfo.ost_rating}</td> */}
-                            <td>{this.props.animeInfo.OP_Rating}</td>
-                            {/* <td>{this.props.animeInfo.ed_rating}</td> */}
-                            <td>{dateStarted}</td>
-                            <td>{dateFinished}</td>
-                        </tr>
-                makeRowGray = true;
-            }
-        }else{
-        this.row =  <tr id='anime-info-row'>
-                        <td style={{fontSize: '14px'}}>{this.props.rowNumber}</td>
-                        <td><input id='cover-filler' placeholder='filler'></input></td>
-                        <td><input id='title-input' placeholder='title'></input></td>
-                        <td><textarea id='self_description_data_input' rows='9' cols='55' ></textarea></td>
-                        <td><input id='overall-rating-input' type='number' min='0' max='10' step='.5' onChange={this.handleNumberChange} className='number-input'></input></td>
+            this.row = <tr className='anime-info-row'>
+                        {deleteCheckbox}
+                        <td className='numberOrderCol anime-table-data'>{this.props.animeInfo.number}</td>
+                        <td onClick={this.prepareUpdate} className='coverCol anime-table-data'>{this.props.animeInfo.cover}</td>
+                        <td className='nameCol anime-table-data'>{this.props.animeInfo.Name}</td>
+                        {this.state.personalThoughtsTD}
+                        <td className='overallRatingCol anime-table-data'>{this.props.animeInfo.Overall_Rating}</td>
                         {/* <td>{this.props.animeInfo.ost_rating}</td> */}
-                        <td><input id='op-rating-input' type='number' min='0' max='10' step='.5' onChange={this.handleNumberChange} className='number-input'></input></td>
+                        <td className='opRatingCol anime-table-data'>{this.props.animeInfo.OP_Rating}</td>
                         {/* <td>{this.props.animeInfo.ed_rating}</td> */}
-                        <td><input id='date-start-input' className='date-input' placeholder='MM/DD/YYYY'></input></td>
-                        <td><input id='date-end-input' className='date-input' placeholder='MM/DD/YYYY'></input></td>
+                        <td className = 'anime-table-data'>{dateStarted}</td>
+                        <td className = 'anime-table-data'>{dateFinished}</td>
                     </tr>
+            
+        }else{
+            this.row =  <tr className='anime-info-row'>
+                            <td style={{fontSize: '14px'}}>{this.props.rowNumber}</td>
+                            <td><input id='cover-filler' placeholder='filler'></input></td>
+                            <td><input id='title-input' placeholder='title'></input></td>
+                            <td><textarea id='self_description_data_input' rows='9' ></textarea></td>
+                            <td><input id='overall-rating-input' type='number' min='0' max='10' step='.1' onChange={this.handleNumberChange} className='number-input'></input></td>
+                            {/* <td>{this.props.animeInfo.ost_rating}</td> */}
+                            <td><input id='op-rating-input' type='number' min='0' max='10' step='.1' onChange={this.handleNumberChange} className='number-input'></input></td>
+                            {/* <td>{this.props.animeInfo.ed_rating}</td> */}
+                            <td><input id='date-start-input' className='date-input' placeholder='MM/DD/YYYY'></input></td>
+                            <td><input id='date-end-input' className='date-input' placeholder='MM/DD/YYYY'></input></td>
+                        </tr>
         }   
     }
 
+    componentDidUpdate(){
+        // if(animeCount === 0){
+        //     console.log('wutup')
+        //     if (firstRow){
+        //         console.log('yo')
+        //         for(let i=0; i<firstRow.getElementsByTagName('TD').length; i++){
+        //             firstRow.getElementsByTagName('TD')[i].classList.remove('first-row-td');
+        //         }
+        //     }
+
+        //     for(let i=0; i<document.getElementsByClassName('anime-info-row')[0].getElementsByTagName('TD').length; i++){
+        //         document.getElementsByClassName('anime-info-row')[0].getElementsByTagName('TD')[i].classList.add('first-row-td');
+        //     }
+
+        //     firstRow = document.getElementsByClassName('anime-info-row')[0];            
+        //     animeCount++;
+        // }else if(animeCount === this.props.animeAmount){
+        //     animeCount = 0;
+        // }else{
+        //     animeCount++;
+        // }
+        let orderChangedOrReversed = this.props.orderChangedOrReversed;
+        console.log(this.props)
+        if(orderChangedOrReversed[orderChangedOrReversed.length-1]){
+            if (firstRow){
+                for(let i=0; i<firstRow.getElementsByTagName('TD').length; i++){
+                    firstRow.getElementsByTagName('TD')[i].classList.remove('first-row-td');
+                }
+            }
+            for(let i=0; i<document.getElementsByClassName('anime-info-row')[0].getElementsByTagName('TD').length; i++){
+                document.getElementsByClassName('anime-info-row')[0].getElementsByTagName('TD')[i].classList.add('first-row-td');
+            }
+            firstRow = document.getElementsByClassName('anime-info-row')[0];            
+        }
+    }
+
+    componentDidMount(){
+        for(let i=0; i<document.getElementsByClassName('anime-info-row')[0].getElementsByTagName('TD').length; i++){
+            document.getElementsByClassName('anime-info-row')[0].getElementsByTagName('TD')[i].classList.add('first-row-td');
+        }
+        firstRow = document.getElementsByClassName('anime-info-row')[0];            
+    }
+
     render(){
-        this.handleRowCreationOrUpdate()
+        
+        this.handleRowCreationOrUpdate();
         return(
             <React.Fragment>
                 {this.row}

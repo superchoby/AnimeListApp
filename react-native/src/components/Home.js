@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { View, Text } from 'react-native';
 
 
-class Home extends Component {
+class HomeScreen extends Component {
   render() {
     return (
       <View>
@@ -12,4 +12,4 @@ class Home extends Component {
   }
 }
 
-export default Home;
+export default HomeScreen;

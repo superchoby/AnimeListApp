@@ -3,6 +3,7 @@ import axios from 'axios';
 import { storeToken, storeUsername } from '../actions/index';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
+import './LoginPage.css';
 
 /**
  * @file LoginPage is a React Component that handles user authentication
@@ -94,20 +95,20 @@ class LoginPage extends Component {
   render() {
     let redirectComponent = this.state.redirect ? <Redirect to='/view-list' /> : <p style={{display: 'none'}}></p>
     return (
-      <React.Fragment>
+      <div id='login-whole-page-div'>
         {redirectComponent}
-        <form onSubmit={this.handleSubmit}>
-          <label>
-            Username:
-            <input type='text' onChange={this.updateUsernameChange} />
-          </label>
-          <label>
-            Password:
-            <input type='password' onChange={this.updatePasswordChange} />
-          </label>
-          <input type='submit' value='Submit' />
+        <form id='login-form' onSubmit={this.handleSubmit}>
+          <div id='username-input-login' className='login-input-divs'>
+            <label>Username:</label>
+            <input className='login-input' type='text' onChange={this.updateUsernameChange} />
+          </div>
+          <div id='password-input-login' className='login-input-divs'>
+            <label>Password:</label>
+            <input className='login-input' type='password' onChange={this.updatePasswordChange} />
+          </div>
+          <input id='login-submit-button' type='submit' value='Submit' />
         </form>
-      </React.Fragment>
+      </div>
     );
   }
 }

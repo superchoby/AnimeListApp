@@ -3,7 +3,7 @@ import './AnimeList.css';
 import axios from 'axios';
 import Row from './AnimeRow';
 import { connect } from 'react-redux';
-import { prepareToDelete } from '../actions/index';
+import { prepareToDelete, storeOrderChangedOrReversed } from '../actions/index';
 
 /**
  * @file AnimeList is a React Component that let's the user see
@@ -27,6 +27,7 @@ import { prepareToDelete } from '../actions/index';
 function mapDispatchToProps(dispatch) {
     return {
         prepareToDelete: shouldPrepareToDelete => dispatch(prepareToDelete(shouldPrepareToDelete)),
+        storeOrderChangedOrReversed: orderChangedOrReversed => dispatch(storeOrderChangedOrReversed(orderChangedOrReversed)),
     }
 }
 
@@ -47,7 +48,6 @@ const mapStateToProps = state => {
     };
 }
 
-
 class AnimeList extends React.Component {
 
     /**
@@ -62,8 +62,9 @@ class AnimeList extends React.Component {
             category_sort_rows_options: [],
             currentCategory: 'Time Entered',
             addNewAnimeTableRow: '',
-            addOrSubmit: <div id='add-anime-icon' className='add-icon' onClick={this.addRows}>&#43;</div>,
+            addOrSubmit: <button id='add-anime-icon' className='add-or-submit-button' onClick={this.addRows}>Add new row</button>,
             deleteCheckboxHeader: <td style={{display: 'none'}}></td>,
+            cancelButton: <td style={{display: 'none'}}></td>,
         }
         this.changeOrder = this.changeOrder.bind(this);
         this.createRows = this.createRows.bind(this);
@@ -75,7 +76,7 @@ class AnimeList extends React.Component {
         this.handleDeleteButtonSubmit = this.handleDeleteButtonSubmit.bind(this);
         this.deleteRows = this.deleteRows.bind(this);
         this.addToDeleteList = this.addToDeleteList.bind(this);
-        
+        this.cancelAdd = this.cancelAdd.bind(this);
         this.animeToDelete = [];
         this.headers = {
             'Content-Type': 'application/json',
@@ -83,21 +84,29 @@ class AnimeList extends React.Component {
         }
     }
 
+    cancelAdd = e =>{
+        this.setState({
+            addOrSubmit: <button id='add-anime-icon' className='add-or-submit-button' onClick={this.addRows}>Add new row</button>,
+            addNewAnimeTableRow: '',
+            cancelButton: <td style={{display: 'none'}}></td>,
+        })
+    }
+
     /**
      * @method
      * @summary function to pass down as props so when 
      * an anime checkbox is filled they are added
      * to list of anime's name to delete
-     * @param {string} animeToDeleteName - Name of anime to delete
+     * @param {string} animeToDelete - Object containing the anime to delete's info
      * @param {boolean} addToList - Determines whether or not the anime's name  
      * should be added or removed from the list depending on if the
      * anime has been checkmarked or uncheckmarked
      */
-    addToDeleteList = (animeToDeleteName, addToList) =>{
+    addToDeleteList = (animeToDelete, addToList) =>{
         if(addToList){
-            this.animeToDelete.push(animeToDeleteName);
+            this.animeToDelete.push(animeToDelete);
         }else{
-            this.animeToDelete.splice(this.animeToDelete.indexOf(animeToDeleteName), 1);
+            this.animeToDelete.splice(this.animeToDelete.indexOf(animeToDelete), 1);
         }
     }
 
@@ -106,12 +115,30 @@ class AnimeList extends React.Component {
      * @summary final delete function that actually deletes the anime
      */
     deleteRows = () =>{
+        let animeToDeleteNames = []
+        for(let i=0; i<this.animeToDelete.length; i++){
+            animeToDeleteNames.push(this.animeToDelete[i].Name)
+        }
         let filteredArray = this.state.anime_info.filter(anime =>{
             // filters out all anime who's name matches the anime to delete
             // only one should be selected as names are unique
-            return !this.animeToDelete.includes(anime.Name)
+            return !animeToDeleteNames.includes(anime.Name)
         })
-
+        
+        for (let i=0; i<this.animeToDelete.length; i++){
+            let url = 'http://127.0.0.1:8000/animes/v1/anime/' + this.animeToDelete[i].id + '/';
+            axios.delete(url,
+            {
+                headers: this.headers,
+            })
+            .then(res =>{
+                console.log('good')
+            })
+            .catch(err =>{
+                console.log('bad')
+            })
+        }
+        
         for (let i=0; i<filteredArray.length; i++){
             filteredArray[i].number = i+1;
         }
@@ -133,13 +160,17 @@ class AnimeList extends React.Component {
      * @param {event} e - paramter that gets passed in button click 
      */
     handleDeleteButtonSubmit = e =>{
+        //decreases the left padding of the number column when delete checkboxes show
+        let numberColumnsArray = Array.from(document.getElementsByClassName('numberOrderCol'));
+        for (let i=0; i<numberColumnsArray.length; i++){
+            numberColumnsArray[i].classList.toggle('numberOrderColDuringDelete');
+        }
         if(document.getElementById('delete-button').innerHTML === 'Delete'){
             document.getElementById('delete-button').innerHTML = 'Confirm';
             this.props.prepareToDelete(true);
-            // this.props.startDeletingProcess(false);
             this.setState({
                 //adds an extra empty table header for the delete checkboxesy
-                deleteCheckboxHeader: <th></th>,
+                deleteCheckboxHeader: <th className='deleteCheckboxCol'></th>,
             })
         }else{// the innerHTML === 'Confirm'
             document.getElementById('delete-button').innerHTML = 'Delete';
@@ -157,13 +188,15 @@ class AnimeList extends React.Component {
     addRows = () =>{
         if(this.state.anime_rows){
             this.setState({
-                addNewAnimeTableRow: <Row createNewRow={true} rowNumber={this.state.anime_rows.length + 1} />,
-                addOrSubmit: <button id='submit-anime-row' onClick={this.handleRowSubmit}>submit</button>,
+                addNewAnimeTableRow: <Row createNewRow={true} animeInfo={{}} rowNumber={this.state.anime_rows.length + 1} />,
+                addOrSubmit: <button className='add-or-submit-button' onClick={this.handleRowSubmit}>submit</button>,
+                cancelButton: <button id='add-anime-icon' className='add-or-submit-button' onClick={this.cancelAdd}>cancel</button>,
             })
         }else{
             this.setState({
-                addNewAnimeTableRow: <Row createNewRow={true} rowNumber={1} />,
-                addOrSubmit: <button id='submit-anime-row' onClick={this.handleRowSubmit}>submit</button>,
+                addNewAnimeTableRow: <Row createNewRow={true} animeInfo={{}} rowNumber={1} />,
+                addOrSubmit: <button className='add-or-submit-button' onClick={this.handleRowSubmit}>submit</button>,
+                cancelButton: <button id='add-anime-icon' className='add-or-submit-button' onClick={this.cancelAdd}>cancel</button>,
             })
         }
     }
@@ -196,7 +229,6 @@ class AnimeList extends React.Component {
                 Overall_Rating: document.getElementById('overall-rating-input').value ? document.getElementById('overall-rating-input').value : null,
                 username: this.props.username,
             }
-            console.log(newAnime)
             axios.post('http://127.0.0.1:8000/animes/v1/anime/', 
             newAnime,
             {
@@ -215,14 +247,13 @@ class AnimeList extends React.Component {
             document.getElementById('date-end-input').value = '';
             document.getElementById('op-rating-input').value = 0;
             document.getElementById('overall-rating-input').value = 0;
-            // console.log(this.state.anime_info)
-            // let newAnimeArray = this.state.anime_info;
             let newAnimeArray = this.state.anime_info ? this.state.anime_info : []
             newAnimeArray.push(newAnime);
             this.setState({
-                addOrSubmit: <div id='add-anime-icon' className='add-icon' onClick={this.addRows}>&#43;</div>,
+                addOrSubmit: <button id='add-anime-icon' className='add-or-submit-button' onClick={this.addRows}>Add new row</button>,
                 addNewAnimeTableRow: '',
                 anime_info: newAnimeArray,
+                cancelButton: <td style={{display: 'none'}}></td>,
             }, function(){
                 this.createRows(this.state.anime_info)
             })
@@ -230,7 +261,7 @@ class AnimeList extends React.Component {
             this.setState({
                 addOrSubmit: 
                     <React.Fragment>
-                        <button id='submit-anime-row' onClick={this.handleRowSubmit}>submit</button>
+                        <button className='add-or-submit-button' onClick={this.handleRowSubmit}>submit</button>
                         <div style={{textAlign: 'center'}}>The name is required.</div>
                     </React.Fragment>
             })
@@ -243,6 +274,7 @@ class AnimeList extends React.Component {
      * @param {event} e - The event paramter passed when button is clicked
      */
     handleReverse = e =>{
+        this.props.storeOrderChangedOrReversed(true);
         document.getElementById('reverse-button').innerHTML = document.getElementById('reverse-button').innerHTML === 'Reverse' ? 'Revert' : 'Reverse';
         this.setState({
             anime_rows: this.state.anime_rows.reverse(),
@@ -271,6 +303,7 @@ class AnimeList extends React.Component {
      */
     changeOrder(e){
         document.getElementById('reverse-button').innerHTML = 'Reverse';
+        this.props.storeOrderChangedOrReversed(true);
         if(e.target.value){
             let category = e.target.value.split(' ');
             category = category.join('_');
@@ -294,12 +327,10 @@ class AnimeList extends React.Component {
                     }
                 }else{
                     return parseFloat(secondAnime[category]) - parseFloat(firstAnime[category]);
-                    // return parseFloat(firstAnime[category]) - parseFloat(secondAnime[category]);
                 }
             })
             this.createRows(sortedByCategoryAnimeInfoList, e.target.value)
         }else{
-            // console.log(this.state.anime_info)
             this.createRows(this.state.anime_info)
         }   
     }
@@ -319,9 +350,10 @@ class AnimeList extends React.Component {
             let categoryOptions = [];
             let copyList = [];
             const firstAnimeObject = animeInfo[0];
+            let animeAmount = animeInfo.length
             //creates category options array
             for(let i=0; i<Object.keys(firstAnimeObject).length; i++){
-                if(Object.keys(firstAnimeObject)[i] !== 'Personal_Thoughts' && Object.keys(firstAnimeObject)[i] !== 'cover'){
+                if(Object.keys(firstAnimeObject)[i] !== 'Personal_Thoughts' && Object.keys(firstAnimeObject)[i] !== 'cover' && Object.keys(firstAnimeObject)[i] !== 'username' && Object.keys(firstAnimeObject)[i] !== 'id'){
                     categoryOptions.push(Object.keys(firstAnimeObject)[i]);
                 }
             }
@@ -340,13 +372,15 @@ class AnimeList extends React.Component {
 
             categoryOptions.unshift(<option key='none' value=''>none</option>)
 
-            for(let i=0; i<animeInfo.length; i++){
+            for(let i=0; i<animeAmount; i++){
                 animeInfo[i]['number'] = i + 1;
                 copyList.push(Object.assign({}, animeInfo[i]))
             }
 
+            
+
             let tempAnimeList = animeInfo.map((anime)=>
-                <Row addToDeleteList={this.addToDeleteList} createNewRow={false} key={anime.Name} animeInfo={anime} />
+                <Row addToDeleteList={this.addToDeleteList} animeAmount={animeAmount} createNewRow={false} key={anime.Name} animeInfo={anime} />
             )
 
             if(this.firstTimeLoading){
@@ -382,6 +416,9 @@ class AnimeList extends React.Component {
      * request to the server and with the info creates the user's anime table
      */
     componentDidMount(){
+        if(document.getElementById('delete-button').innerHTML === 'Delete'){
+            this.props.prepareToDelete(false);
+        }
         axios.get('http://127.0.0.1:8000/users/v1/user/',
         {
             headers: this.headers,
@@ -403,56 +440,68 @@ class AnimeList extends React.Component {
             })
         })
         .catch(error => {
-            console.log('There was an error blue');
+            console.log('There was an error');
         })
-
     }
     
     render() {
         return(
             <div id='anime-list'>
+
                 <div id='welcome-sign'>
-                    <h1>MitaAnime</h1>
-                    <h2>e youkouso!</h2>
-                </div>
-                <div id='category-title'>
-                    <p id='current-filter'>Currently ordered by {this.state.currentCategory}</p>
-                    <div id='button-options'>
-                        <form id='category-form'>
-                            <select name='category-filter' onChange={this.changeOrder}>
-                                {this.state.category_sort_rows_options}
-                            </select>
-                        </form>
-                        <button id='reverse-button' onClick={this.handleReverse}>Reverse</button>
-                        <button id='delete-button' onClick={this.handleDeleteButtonSubmit}>Delete</button>
+                    <div id='banner'>
+                        <h1>Welcome to AnimeLog</h1>
+                        <h2>Happy to see you!</h2>
+                    </div>
+                    <div id='category-title'>
+                        <p id='current-filter'>Currently ordered by {this.state.currentCategory}</p>
+                        <div id='button-options'>
+                            <form id='category-form'>
+                                <div id='category-dropdown'>
+                                    <select onChange={this.changeOrder}>
+                                        {this.state.category_sort_rows_options}
+                                    </select>
+                                </div>
+                            </form>
+                            <button id='reverse-button' className='option-buttons' onClick={this.handleReverse}>Reverse</button>
+                            <button id='delete-button' className='option-buttons' onClick={this.handleDeleteButtonSubmit}>Delete</button>
+                        </div>
                     </div>
                 </div>
-                
+
                 <table id='anime-table'>
                     <thead>
                         <tr>
                             {this.state.deleteCheckboxHeader}
-                            <th>&nbsp;&nbsp;#&nbsp;&nbsp;</th>
-                            <th>&nbsp;Cover&nbsp;</th>
-                            <th id='name-category'>Name</th>
-                            <th>Personal Thoughts/Reaction</th>
-                            <th>Overall Rating</th>
+                            <th className='numberOrderCol'>&nbsp;&nbsp;#&nbsp;&nbsp;</th>
+                            <th className='coverCol'>&nbsp;Cover&nbsp;</th>
+                            <th className='nameCol' id='name-category'>Name</th>
+                            <th className='personalThoughtsCol'>Personal Thoughts</th>
+                            <th className='overallRatingCol'>Overall Rating</th>
                             {/* <th>OST Rating</th> */}
-                            <th>OP Rating</th>
+                            <th className='opRatingCol'>OP Rating</th>
                             {/* <th>ED Rating</th> */}
-                            <th>Date Started</th>
-                            <th>Date Finished</th>
+                            <th className='dateStartCol'>Date Started</th>
+                            <th className='dateFinishCol'>Date Finished</th>
                             {/* <th>Add/Remove a Category</th> */}
                         </tr>
                     </thead>
-                    <tbody id='anime-rows'>
+
+                    <tbody id='anime-rows' style={{marginTop: '20px'}}>
                         {this.state.anime_rows}
                     </tbody>
-                    <tbody id='add-row'>
+
+                    <tbody className='add-row'>
                         {this.state.addNewAnimeTableRow}
                     </tbody>
+                    
                 </table>
-                {this.state.addOrSubmit}
+
+                <div id='buttons-div'>
+                    {this.state.addOrSubmit}
+                    {this.state.cancelButton}
+                </div>
+
             </div>
             //</React.Fragment>
         )
