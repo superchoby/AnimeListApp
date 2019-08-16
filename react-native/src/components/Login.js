@@ -3,6 +3,7 @@ import { View, Text, TextInput, Button } from 'react-native';
 import axios from 'axios';
 import { connect } from 'react-redux';
 import {storeToken, storeUsername } from '../actions/index'
+
 function mapDispatchToProps(dispatch) {
   return {
     storeToken: token => dispatch(storeToken(token)),
@@ -39,10 +40,10 @@ class Login extends Component {
 
 
   handleSubmit = () =>{
-    axios.post('http://8d6808d3.ngrok.io/api-token-auth/', this.state)
+    axios.post('http://58fc8356.ngrok.io/api-token-auth/', this.state)
     .then(res =>{
       this.props.storeToken(res.data.token);
-      this.props.storeUsername(this.state.username)
+      this.props.storeUsername(this.state.username.toLowerCase())
       this.props.navigation.navigate('Home')
       this.setState({
         redirect: true,

@@ -81,7 +81,7 @@ class LoginPage extends Component {
     axios.post('http://127.0.0.1:8000/api-token-auth/', this.state)
     .then(res =>{
       this.props.storeToken(res.data.token);
-      this.props.storeUsername(this.state.username)
+      this.props.storeUsername(this.state.username.toLowerCase())
       this.setState({
         redirect: true,
       })

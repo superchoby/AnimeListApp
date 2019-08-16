@@ -1,6 +1,8 @@
 import React from 'react';
 import './AnimeRow.css'
 import { connect } from 'react-redux';
+import DatePicker from 'react-datepicker';
+import "react-datepicker/dist/react-datepicker.css";
 
 /**
  * @file AnimeRow is a React Component is a row that stores
@@ -46,6 +48,37 @@ class AnimeRow extends React.Component{
         this.dateConverter = this.dateConverter.bind(this);
         this.handleReactionHover = this.handleReactionHover.bind(this);
         this.handleReactionMouseOut = this.handleReactionMouseOut.bind(this);
+        this.handleStartDateChange = this.handleStartDateChange.bind(this);
+        this.handleEndDateChange = this.handleEndDateChange.bind(this);
+    }
+
+    handleStartDateChange = date =>{
+        this.setState({
+          startDate: date
+        });
+        if(date){
+            let month = (date.getMonth() + 1) < 10 ? '0' + (date.getMonth() + 1).toString() : (date.getMonth() + 1).toString()
+            let day = date.getDate() < 10 ? '0' + date.getDate().toString() : date.getDate().toString()
+            let year = date.getFullYear()
+            document.getElementById('date-start-input').value = month + '/' + day + '/' + year
+        }else{
+            document.getElementById('date-start-input').value = '';
+        }
+    }
+
+    handleEndDateChange = date =>{
+        this.setState({
+                endDate: date
+            });
+        if(date){
+            let month = (date.getMonth() + 1) < 10 ? '0' + (date.getMonth() + 1).toString() : (date.getMonth() + 1).toString()
+            let day = date.getDate() < 10 ? '0' + date.getDate().toString() : date.getDate().toString()
+            let year = date.getFullYear()
+            document.getElementById('date-end-input').value = month + '/' + day + '/' + year
+        }else{
+            document.getElementById('date-end-input').value = ''
+        }
+        
     }
 
     /**
@@ -89,9 +122,10 @@ class AnimeRow extends React.Component{
      * @return {string} The date converted to MON DD, YYYY format
      */
     dateConverter = date =>{
-        if(date !== null){
+        if(date !== null && date !== ''){
             const shortMonths = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
             let dateInst = new Date(date);
+            console.log(dateInst)
             let month = shortMonths[dateInst.getMonth()];
             let day = dateInst.getDate() < 10 ? '0' + dateInst.getDate().toString() : dateInst.getDate().toString();
             let year = dateInst.getFullYear();
@@ -158,46 +192,42 @@ class AnimeRow extends React.Component{
                         <td className = 'anime-table-data'>{dateStarted}</td>
                         <td className = 'anime-table-data'>{dateFinished}</td>
                     </tr>
-            
+                
         }else{
             this.row =  <tr className='anime-info-row'>
                             <td style={{fontSize: '14px'}}>{this.props.rowNumber}</td>
-                            <td><input id='cover-filler' placeholder='filler'></input></td>
-                            <td><input id='title-input' placeholder='title'></input></td>
+                            <td><input id='cover-filler' placeholder='filler' autoComplete="off"></input></td>
+                            <td><input id='title-input' placeholder='title' autoComplete="off" required></input></td>
                             <td><textarea id='self_description_data_input' rows='9' ></textarea></td>
-                            <td><input id='overall-rating-input' type='number' min='0' max='10' step='.1' onChange={this.handleNumberChange} className='number-input'></input></td>
+                            <td><input id='overall-rating-input' type='number' min='0' max='10' step='.1' onChange={this.handleNumberChange} className='number-input' autoComplete="off"></input></td>
                             {/* <td>{this.props.animeInfo.ost_rating}</td> */}
-                            <td><input id='op-rating-input' type='number' min='0' max='10' step='.1' onChange={this.handleNumberChange} className='number-input'></input></td>
+                            <td><input id='op-rating-input' type='number' min='0' max='10' step='.1' onChange={this.handleNumberChange} className='number-input' autoComplete="off"></input></td>
                             {/* <td>{this.props.animeInfo.ed_rating}</td> */}
-                            <td><input id='date-start-input' className='date-input' placeholder='MM/DD/YYYY'></input></td>
-                            <td><input id='date-end-input' className='date-input' placeholder='MM/DD/YYYY'></input></td>
+                            <td>
+                                <DatePicker 
+                                    selected={this.state.startDate} 
+                                    onChange={this.handleStartDateChange} 
+                                />
+                            </td>
+                            <td>
+                                <DatePicker 
+                                    selected={this.state.endDate} 
+                                    onChange={this.handleEndDateChange} 
+                                />
+                            </td>
+                            <td style={{'display':'none'}}>
+                                 <p id='date-start-input'></p>   
+                            </td>
+                            <td style={{'display':'none'}}>
+                                 <p id='date-end-input'></p>                           
+                            </td>
                         </tr>
         }   
     }
 
     componentDidUpdate(){
-        // if(animeCount === 0){
-        //     console.log('wutup')
-        //     if (firstRow){
-        //         console.log('yo')
-        //         for(let i=0; i<firstRow.getElementsByTagName('TD').length; i++){
-        //             firstRow.getElementsByTagName('TD')[i].classList.remove('first-row-td');
-        //         }
-        //     }
 
-        //     for(let i=0; i<document.getElementsByClassName('anime-info-row')[0].getElementsByTagName('TD').length; i++){
-        //         document.getElementsByClassName('anime-info-row')[0].getElementsByTagName('TD')[i].classList.add('first-row-td');
-        //     }
-
-        //     firstRow = document.getElementsByClassName('anime-info-row')[0];            
-        //     animeCount++;
-        // }else if(animeCount === this.props.animeAmount){
-        //     animeCount = 0;
-        // }else{
-        //     animeCount++;
-        // }
         let orderChangedOrReversed = this.props.orderChangedOrReversed;
-        console.log(this.props)
         if(orderChangedOrReversed[orderChangedOrReversed.length-1]){
             if (firstRow){
                 for(let i=0; i<firstRow.getElementsByTagName('TD').length; i++){

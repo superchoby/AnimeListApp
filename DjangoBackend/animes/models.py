@@ -6,7 +6,7 @@ from django.contrib.postgres.fields import JSONField
 
 class Anime(models.Model):
     Name = models.CharField(max_length=100, blank=True)
-    cover = models.CharField(max_length=100, blank=True)
+    cover = models.CharField(max_length=100, null=True, blank=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     data = JSONField()
     # Personal_Thoughts = models.TextField(null=True)

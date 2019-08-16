@@ -45,8 +45,10 @@ INSTALLED_APPS = [
     'corsheaders',
 ]
 
+#remove these during prodution
 CORS_ORIGIN_WHITELIST = [
     "http://localhost:3000",
+    "https://nequam.serveo.net",
 ]
 
 MIDDLEWARE = [

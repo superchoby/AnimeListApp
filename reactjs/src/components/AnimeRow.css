@@ -10,7 +10,7 @@ textarea{
 }
 
 .date-input{
-    width: 68px;
+    width: 110px;
 }
 
 .anime-info-row{
@@ -20,19 +20,19 @@ textarea{
 }
 
 .date-input::-webkit-input-placeholder { /* Chrome/Opera/Safari */
-    font-size: 10px;
+    font-size: 9px;
 }
 
 .date-input::-moz-placeholder { /* Firefox 19+ */
-    font-size: 10px;
+    font-size: 9px;
 }
 
 .date-input:-ms-input-placeholder { /* IE 10+ */
-    font-size: 10px;
+    font-size: 9px;
 }
 
 .date-input:-moz-placeholder { /* Firefox 18- */
-    font-size: 10px;
+    font-size: 9px;
 }
   
 #cover-filler{
@@ -66,4 +66,8 @@ textarea{
 @font-face {
     font-family: "Segoe UI";
     src: url("../fonts/SegoeUI.woff");
+}
+
+.react-datepicker__input-container input{
+    width: 90px;
 }

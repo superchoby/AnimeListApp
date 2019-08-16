@@ -4,6 +4,7 @@ import axios from 'axios';
 import Row from './AnimeRow';
 import { connect } from 'react-redux';
 import { prepareToDelete, storeOrderChangedOrReversed } from '../actions/index';
+// import Tooltip from './Tooltip';
 
 /**
  * @file AnimeList is a React Component that let's the user see
@@ -78,6 +79,7 @@ class AnimeList extends React.Component {
         this.addToDeleteList = this.addToDeleteList.bind(this);
         this.cancelAdd = this.cancelAdd.bind(this);
         this.animeToDelete = [];
+        this.errorsList = [];
         this.headers = {
             'Content-Type': 'application/json',
             'Authorization': 'Token ' + this.props.token,
@@ -124,7 +126,7 @@ class AnimeList extends React.Component {
             // only one should be selected as names are unique
             return !animeToDeleteNames.includes(anime.Name)
         })
-        
+
         for (let i=0; i<this.animeToDelete.length; i++){
             let url = 'http://127.0.0.1:8000/animes/v1/anime/' + this.animeToDelete[i].id + '/';
             axios.delete(url,
@@ -212,19 +214,25 @@ class AnimeList extends React.Component {
      */
     handleRowSubmit = e =>{
         if(document.getElementById('title-input').value !== ''){
+
             if(document.getElementById('reverse-button').innerHTML === 'Revert'){
                 document.getElementById('reverse-button').innerHTML = 'Reverse';
             } 
-            let split_date_started = document.getElementById('date-start-input').value.split('/');
-            let split_date_finished = document.getElementById('date-end-input').value.split('/');
-            let formattted_date_started = split_date_started.length === 1 ? null : `${split_date_started[2]}-${split_date_started[1]}-${split_date_started[0]}`
-            let formattted_date_finished = split_date_finished.length === 1 ? null : `${split_date_finished[2]}-${split_date_finished[1]}-${split_date_finished[0]}`
+
+            if(!document.getElementById('date-start-input').value){
+                document.getElementById('date-start-input').value = ''
+            }
+
+            if(!document.getElementById('date-end-input').value){
+                document.getElementById('date-end-input').value = ''
+            }
+
             let newAnime = {
                 Name: document.getElementById('title-input').value ? document.getElementById('title-input').value : null,
                 cover: document.getElementById('cover-filler').value ? document.getElementById('cover-filler').value : null,
                 Personal_Thoughts: document.getElementById('self_description_data_input').value ? document.getElementById('self_description_data_input').value : null,
-                Date_Started: formattted_date_started,
-                Date_Finished: formattted_date_finished,
+                Date_Started: document.getElementById('date-start-input').value,
+                Date_Finished: document.getElementById('date-end-input').value,
                 OP_Rating: document.getElementById('op-rating-input').value ? document.getElementById('op-rating-input').value : null,
                 Overall_Rating: document.getElementById('overall-rating-input').value ? document.getElementById('overall-rating-input').value : null,
                 username: this.props.username,
@@ -262,7 +270,7 @@ class AnimeList extends React.Component {
                 addOrSubmit: 
                     <React.Fragment>
                         <button className='add-or-submit-button' onClick={this.handleRowSubmit}>submit</button>
-                        <div style={{textAlign: 'center'}}>The name is required.</div>
+                        <div style={{textAlign: 'center', 'display': 'inline-block', color: 'white'}}>The name is required.</div>
                     </React.Fragment>
             })
         }
@@ -376,8 +384,6 @@ class AnimeList extends React.Component {
                 animeInfo[i]['number'] = i + 1;
                 copyList.push(Object.assign({}, animeInfo[i]))
             }
-
-            
 
             let tempAnimeList = animeInfo.map((anime)=>
                 <Row addToDeleteList={this.addToDeleteList} animeAmount={animeAmount} createNewRow={false} key={anime.Name} animeInfo={anime} />
@@ -498,10 +504,14 @@ class AnimeList extends React.Component {
                 </table>
 
                 <div id='buttons-div'>
+                    {/* <div className="tooltip">
+                        
+                        <span className="tooltiptext">Tooltip text</span>
+                    </div> */}
                     {this.state.addOrSubmit}
                     {this.state.cancelButton}
                 </div>
-
+                
             </div>
             //</React.Fragment>
         )
