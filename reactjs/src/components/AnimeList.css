@@ -60,6 +60,7 @@ form{
     height: 45px;
     width: 130px;
     margin: 30px 30px;
+    cursor: pointer;
     display: inline-block;
     border: none;
     border-radius: 5px;
@@ -96,6 +97,7 @@ thead tr th{
 #category-dropdown select{
     background: white;
     padding: 10px;
+    cursor: pointer;
     width: 180px;
     border: none;
     border-bottom: .95px solid #b2b2b2;
@@ -111,6 +113,7 @@ thead tr th{
     font-size: 18px;
     padding: 10px;
     border: .95px solid #b2b2b2;
+    cursor: pointer;
 }
 
 .numberOrderCol{
@@ -118,7 +121,7 @@ thead tr th{
     width: 5%;
 }
 
-.numberOrderColDuringDelete{
+.numberOrderColDuringDeleteOrEdit{
     padding-left: 0px !important;
     padding-right: 20px;
 }

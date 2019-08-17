@@ -18,5 +18,5 @@ class Anime(models.Model):
     # Overall_Rating = models.DecimalField(null=True, max_digits=3, decimal_places=1)
 
     def __str__(self):
-        return self.Name
+        return self.user.username + "\'s " + self.Name
 

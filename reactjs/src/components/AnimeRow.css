@@ -71,3 +71,14 @@ textarea{
 .react-datepicker__input-container input{
     width: 90px;
 }
+
+.save-edit-link{
+    cursor: pointer;
+    color:blue;
+    text-decoration:underline;
+    padding-bottom: 20px;
+}
+
+#delete-checkbox{
+    padding-bottom: 20px;
+}
