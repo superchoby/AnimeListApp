@@ -45,7 +45,9 @@ function mapDispatchToProps(dispatch) {
 const mapStateToProps = state => {
     return { 
         token: state.token[state.token.length-1],
-        username: state.username[state.username.length-1]
+        username: state.username[state.username.length-1],
+        shouldPrepareToDelete: state.shouldPrepareToDelete,
+        shouldPrepareToEdit: state.shouldPrepareToEdit,
     };
 }
 
@@ -91,6 +93,13 @@ class AnimeList extends React.Component {
     handleEditButtonSubmit = e =>{
         let numberColumnsArray = Array.from(document.getElementsByClassName('numberOrderCol'));
         if(document.getElementById('edit-button').innerHTML === 'Edit'){
+            if(this.props.shouldPrepareToDelete){
+                this.props.prepareToDelete(false);
+                document.getElementById('delete-button').innerHTML = 'Delete';
+            }
+            if(this.animeToDelete.length !== 0){
+                this.animeToDelete.length = 0;
+            }
             for (let i=0; i<numberColumnsArray.length; i++){
                 numberColumnsArray[i].classList.add('numberOrderColDuringDeleteOrEdit');
             }
@@ -201,6 +210,10 @@ class AnimeList extends React.Component {
             numberColumnsArray[i].classList.toggle('numberOrderColDuringDeleteOrEdit');
         }
         if(document.getElementById('delete-button').innerHTML === 'Delete'){
+            if(this.props.shouldPrepareToEdit){
+                this.props.prepareToEdit(false);
+                document.getElementById('edit-button').innerHTML = 'Edit'
+            }
             document.getElementById('delete-button').innerHTML = 'Confirm';
             this.props.prepareToDelete(true);
             this.setState({
@@ -394,7 +407,7 @@ class AnimeList extends React.Component {
             let animeAmount = animeInfo.length
             //creates category options array
             for(let i=0; i<Object.keys(firstAnimeObject).length; i++){
-                if(Object.keys(firstAnimeObject)[i] !== 'Personal_Thoughts' && Object.keys(firstAnimeObject)[i] !== 'cover' && Object.keys(firstAnimeObject)[i] !== 'username' && Object.keys(firstAnimeObject)[i] !== 'id'){
+                if(Object.keys(firstAnimeObject)[i] !== 'Personal_Thoughts' && Object.keys(firstAnimeObject)[i] !== 'cover' && Object.keys(firstAnimeObject)[i] !== 'username' && Object.keys(firstAnimeObject)[i] !== 'id' && Object.keys(firstAnimeObject)[i] !== 'data' && Object.keys(firstAnimeObject)[i] !== 'number'){
                     categoryOptions.push(Object.keys(firstAnimeObject)[i]);
                 }
             }

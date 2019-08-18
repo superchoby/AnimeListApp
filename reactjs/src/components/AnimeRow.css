@@ -82,3 +82,35 @@ textarea{
 #delete-checkbox{
     padding-bottom: 20px;
 }
+
+@media only screen and (max-width: 666px){
+
+    .dateStartCol{
+        display: none;
+    }
+
+    .dateFinishCol{
+        display: none;
+    }
+    
+    .numberOrderCol{
+        display: none;
+    }
+
+    .coverCol{
+        width: 15%;
+    }
+    
+    .nameCol{
+        width: 18%;
+    }
+    
+    .personalThoughtsCol{
+        width: 38%;
+    }
+    
+    .overallRatingCol{
+        width: 29%;
+    }
+
+}

@@ -22,7 +22,7 @@ table {
 
 #anime-list{
     padding: 0;
-    width: 68%;
+    width: 75%;
 }
 
 #current-filter{
@@ -221,3 +221,92 @@ thead tr th{
 }
 
 /* end of tooltip */
+
+@media only screen and (max-width: 1537px){
+    #anime-list{
+        width: 90%;
+    }
+}
+
+@media only screen and (max-width: 1269px){
+    #anime-list{
+        width: 100%;
+    }
+}
+
+@media only screen and (max-width: 1097px){
+
+    .option-buttons{
+        width: 130px;
+    }
+
+    #category-dropdown select{
+        width: 130px;
+    }
+}
+
+@media only screen and (max-width: 893px){
+
+    .option-buttons{
+        width: 100px;
+    }
+
+    #category-dropdown select{
+        width: 100px;
+    }
+}
+
+@media only screen and (max-width: 666px){
+
+    .option-buttons{
+        display: none;
+    }
+
+    #category-dropdown select{
+        width: 100px;
+    }
+}
+
+@media only screen and (max-width: 666px){
+
+    .option-buttons{
+        display: none;
+    }
+
+    #category-dropdown select{
+        width: 100px;
+    }
+
+    .dateStartCol{
+        display: none;
+    }
+
+    .dateFinishCol{
+        display: none;
+    }
+    
+    .numberOrderCol{
+        display: none;
+    }
+
+    .opRatingCol{
+        display: none;
+    }
+
+    .coverCol{
+        width: 15%;
+    }
+    
+    .nameCol{
+        width: 18%;
+    }
+    
+    .personalThoughtsCol{
+        width: 38%;
+    }
+    
+    .overallRatingCol{
+        width: 29%;
+    }
+
+}

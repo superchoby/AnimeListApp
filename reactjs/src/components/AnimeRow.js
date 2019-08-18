@@ -49,8 +49,8 @@ class AnimeRow extends React.Component{
             newPersonalThoughts: '',
             newOverallRating: '',
             newOPRating: '',
-            newStartDate: new Date(this.props.animeInfo.data.Date_Started),
-            newEndDate: new Date(this.props.animeInfo.data.Date_Finished),
+            newStartDate: this.props.animeInfo.data ? new Date(this.props.animeInfo.data.Date_Started) : '',
+            newEndDate: this.props.animeInfo.data ? new Date(this.props.animeInfo.data.Date_Finished) : '',
         }
 
         this.handleNumberChange = this.handleNumberChange.bind(this);
@@ -149,7 +149,6 @@ class AnimeRow extends React.Component{
             .catch(error=>{
                 console.log('bad')
             })
-
             
         this.thisRowIsEdited = true;
         this.setState({
@@ -367,8 +366,8 @@ class AnimeRow extends React.Component{
                         {/* <td>{this.props.animeInfo.ost_rating}</td> */}
                         <td className='opRatingCol anime-table-data'>{this.props.animeInfo.OP_Rating}</td>
                         {/* <td>{this.props.animeInfo.ed_rating}</td> */}
-                        <td className = 'anime-table-data'>{dateStarted}</td>
-                        <td className = 'anime-table-data'>{dateFinished}</td>
+                        <td className = 'anime-table-data dateStartCol'>{dateStarted}</td>
+                        <td className = 'anime-table-data dateFinishCol'>{dateFinished}</td>
                     </tr>
                 
         }else if(this.thisRowIsEdited){
@@ -408,26 +407,26 @@ class AnimeRow extends React.Component{
                         {newPersonalThoughtsTD}
                         <td className='overallRatingCol anime-table-data'>{newOverallRating}</td>
                         <td className='opRatingCol anime-table-data'>{newOPRating}</td>
-                        <td className = 'anime-table-data'>{this.dateConverter(newDateStarted)}</td>
-                        <td className = 'anime-table-data'>{this.dateConverter(newDateFinished)}</td>
+                        <td className = 'anime-table-data dateStartCol'>{this.dateConverter(newDateStarted)}</td>
+                        <td className = 'anime-table-data dateFinishCol'>{this.dateConverter(newDateFinished)}</td>
                     </tr>
         }else{
             this.row =  <tr className='anime-info-row'>
-                            <td style={{fontSize: '14px'}}>{this.props.rowNumber}</td>
-                            <td><input id='cover-filler' placeholder='filler' autoComplete="off"></input></td>
-                            <td><input id='title-input' placeholder='title' autoComplete="off" required></input></td>
-                            <td><textarea id='self_description_data_input' rows='9' ></textarea></td>
-                            <td><input id='overall-rating-input' type='number' min='0' max='10' step='.1' onChange={this.handleNumberChange} className='number-input' autoComplete="off"></input></td>
+                            <td style={{fontSize: '14px'}} className='numberOrderCol'>{this.props.rowNumber}</td>
+                            <td><input id='cover-filler' className='coverCol' placeholder='filler' autoComplete="off"></input></td>
+                            <td><input id='title-input' className='nameCol' placeholder='title' autoComplete="off" required></input></td>
+                            <td><textarea id='self_description_data_input' className='personalThoughtsCol' rows='9' ></textarea></td>
+                            <td><input id='overall-rating-input' className='overallRatingCol' type='number' min='0' max='10' step='.1' onChange={this.handleNumberChange} autoComplete="off"></input></td>
                             {/* <td>{this.props.animeInfo.ost_rating}</td> */}
-                            <td><input id='op-rating-input' type='number' min='0' max='10' step='.1' onChange={this.handleNumberChange} className='number-input' autoComplete="off"></input></td>
+                            <td><input id='op-rating-input' className='opRatingCol' type='number' min='0' max='10' step='.1' onChange={this.handleNumberChange} autoComplete="off"></input></td>
                             {/* <td>{this.props.animeInfo.ed_rating}</td> */}
-                            <td>
+                            <td className='dateStartCol'>
                                 <DatePicker 
                                     selected={this.state.startDate} 
                                     onChange={this.handleStartDateChange} 
                                 />
                             </td>
-                            <td>
+                            <td className='dateFinishCol'>
                                 <DatePicker 
                                     selected={this.state.endDate} 
                                     onChange={this.handleEndDateChange} 
@@ -467,6 +466,12 @@ class AnimeRow extends React.Component{
     }
 
     render(){
+        //if the row shouldnt prepare to edit, then,
+        //this.trying to edit row is false
+        if(!this.props.shouldPrepareToEdit[this.props.shouldPrepareToEdit.length-1]){
+            this.tryingToEditRow = false;
+        }
+
         if(!this.tryingToEditRow || this.thisRowIsEdited){
             this.handleRowCreationOrUpdate();
         }else if(this.tryingToEditRow){
