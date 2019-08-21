@@ -21,7 +21,7 @@ class UserView(mixins.RetrieveModelMixin,
         if serializer.is_valid():
             user = User.objects.create_user(
             email = request.data['email'],
-            username = request.data['username'],
+            username = request.data['username'].lower(),
             password = request.data['password'],
             )
             Token.objects.get_or_create(user=user)        

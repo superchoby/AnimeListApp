@@ -22,7 +22,7 @@ table {
 
 #anime-list{
     padding: 0;
-    width: 68%;
+    width: 75%;
 }
 
 #current-filter{
@@ -60,6 +60,7 @@ form{
     height: 45px;
     width: 130px;
     margin: 30px 30px;
+    cursor: pointer;
     display: inline-block;
     border: none;
     border-radius: 5px;
@@ -96,6 +97,7 @@ thead tr th{
 #category-dropdown select{
     background: white;
     padding: 10px;
+    cursor: pointer;
     width: 180px;
     border: none;
     border-bottom: .95px solid #b2b2b2;
@@ -111,6 +113,7 @@ thead tr th{
     font-size: 18px;
     padding: 10px;
     border: .95px solid #b2b2b2;
+    cursor: pointer;
 }
 
 .numberOrderCol{
@@ -118,37 +121,33 @@ thead tr th{
     width: 5%;
 }
 
-.numberOrderColDuringDelete{
+.numberOrderColDuringDeleteOrEdit{
     padding-left: 0px !important;
     padding-right: 20px;
 }
 
-.coverCol{
-    width: 5%;
-}
-
 .nameCol{
-    width: 6%;
+    width: 16%;
 }
 
 .personalThoughtsCol{
-    width: 14%;
+    width: 18%;
 }
 
 .overallRatingCol{
-    width: 11%;
+    width: 10%;
 }
 
 .opRatingCol{
-    width: 8%;
+    width: 10%;
 }
 
 .dateStartCol{
-    width: 8%;
+    width: 14%;
 }
 
 .dateFinishCol{
-    width: 7%;
+    width: 14%;
 }
 
 .deleteCheckboxCol{
@@ -177,4 +176,129 @@ thead tr th{
     flex-direction: row;
     justify-content: center;
     align-items: center;
+}
+
+/* tooltip stuff */
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+  }
+  
+.tooltip .tooltiptext {
+    visibility: hidden;
+    /* visibility: visible; */
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    top: 150%;
+    left: 50%;
+    margin-left: -60px;
+}
+
+.tooltip .tooltiptext::after {
+    content: "";
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent black transparent;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+}
+
+/* end of tooltip */
+
+@media only screen and (max-width: 1537px){
+    #anime-list{
+        width: 90%;
+    }
+}
+
+@media only screen and (max-width: 1269px){
+    #anime-list{
+        width: 100%;
+    }
+}
+
+@media only screen and (max-width: 1097px){
+
+    .option-buttons{
+        width: 130px;
+    }
+
+    #category-dropdown select{
+        width: 130px;
+    }
+}
+
+@media only screen and (max-width: 893px){
+
+    .option-buttons{
+        width: 100px;
+    }
+
+    #category-dropdown select{
+        width: 100px;
+    }
+}
+
+@media only screen and (max-width: 666px){
+
+    .option-buttons{
+        display: none;
+    }
+
+    #category-dropdown select{
+        width: 100px;
+    }
+}
+
+@media only screen and (max-width: 666px){
+
+    .option-buttons{
+        display: none;
+    }
+
+    #category-dropdown select{
+        width: 100px;
+    }
+
+    .dateStartCol{
+        display: none;
+    }
+
+    .dateFinishCol{
+        display: none;
+    }
+    
+    .numberOrderCol{
+        display: none;
+    }
+
+    .opRatingCol{
+        display: none;
+    }
+    
+    .nameCol{
+        width: 18%;
+    }
+    
+    .personalThoughtsCol{
+        width: 38%;
+    }
+    
+    .overallRatingCol{
+        width: 29%;
+    }
+
 }

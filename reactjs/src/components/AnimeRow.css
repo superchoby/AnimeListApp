@@ -10,7 +10,7 @@ textarea{
 }
 
 .date-input{
-    width: 68px;
+    width: 110px;
 }
 
 .anime-info-row{
@@ -19,24 +19,24 @@ textarea{
     font-family: 'Segoe UI'
 }
 
+#self_description_data_input{
+    width: 100%;
+}
+
 .date-input::-webkit-input-placeholder { /* Chrome/Opera/Safari */
-    font-size: 10px;
+    font-size: 9px;
 }
 
 .date-input::-moz-placeholder { /* Firefox 19+ */
-    font-size: 10px;
+    font-size: 9px;
 }
 
 .date-input:-ms-input-placeholder { /* IE 10+ */
-    font-size: 10px;
+    font-size: 9px;
 }
 
 .date-input:-moz-placeholder { /* Firefox 18- */
-    font-size: 10px;
-}
-  
-#cover-filler{
-    width: 25px;
+    font-size: 9px;
 }
 
 #personalThoughts{
@@ -67,3 +67,47 @@ textarea{
     font-family: "Segoe UI";
     src: url("../fonts/SegoeUI.woff");
 }
+
+.react-datepicker__input-container input{
+    width: 90px;
+}
+
+.save-edit-link{
+    cursor: pointer;
+    color:blue;
+    text-decoration:underline;
+    padding-bottom: 20px;
+}
+
+#delete-checkbox{
+    padding-bottom: 20px;
+}
+
+@media only screen and (max-width: 666px){
+
+    .dateStartCol{
+        display: none;
+    }
+
+    .dateFinishCol{
+        display: none;
+    }
+    
+    .numberOrderCol{
+        display: none;
+    }
+    
+    .nameCol{
+        width: 18%;
+    }
+    
+    .personalThoughtsCol{
+        width: 38%;
+    }
+    
+    .overallRatingCol{
+        width: 29%;
+    }
+
+}
+

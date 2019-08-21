@@ -17,15 +17,27 @@ class AnimeView(mixins.RetrieveModelMixin,
         data = request.data
         animeData = {}
         for key, value in data.items():
-            if key == 'Name' or key == 'cover':
+            if key == 'Name':
                 pass
             else:
                 animeData[key] = value
         anime = Anime.objects.create(
             Name=data['Name'],
-            cover = data['cover'],
             user = User.objects.get(username=data['username']),
             data = animeData,
         )
         serializer = AnimeSerializer(anime)
         return Response(serializer.data)
+
+    def partial_update(self, request, pk):
+        serializer = AnimeSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        anime = Anime.objects.get(id=pk)
+        for key, value in request.data.items():
+            if key != 'data':
+                setattr(anime, key, value)
+        for key in anime.data.keys():
+            if key in request.data['data'].keys():
+                anime.data[key] = request.data['data'][key]
+        anime.save()
+        return Response(request.data)
