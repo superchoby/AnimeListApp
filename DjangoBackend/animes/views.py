@@ -17,13 +17,12 @@ class AnimeView(mixins.RetrieveModelMixin,
         data = request.data
         animeData = {}
         for key, value in data.items():
-            if key == 'Name' or key == 'cover':
+            if key == 'Name':
                 pass
             else:
                 animeData[key] = value
         anime = Anime.objects.create(
             Name=data['Name'],
-            cover = data['cover'],
             user = User.objects.get(username=data['username']),
             data = animeData,
         )

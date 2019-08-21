@@ -44,7 +44,6 @@ class AnimeRow extends React.Component{
                     {this.props.animeInfo.Personal_Thoughts}
                 </td>,
             editButtonClicked: false,
-            newCover: '',
             newName: '',
             newPersonalThoughts: '',
             newOverallRating: '',
@@ -64,7 +63,6 @@ class AnimeRow extends React.Component{
         this.handleEditClick = this.handleEditClick.bind(this);
         this.saveEditedRow = this.saveEditedRow.bind(this);
         this.tryingToEditRow = false;
-        this.setNewCover = this.setNewCover.bind(this);
         this.setNewName = this.setNewName.bind(this);
         this.setNewPersonalThoughts = this.setNewPersonalThoughts.bind(this);
         this.setNewOverallRating = this.setNewOverallRating.bind(this);
@@ -104,12 +102,6 @@ class AnimeRow extends React.Component{
         }else{
             document.getElementById('date-end-input-edit').value = '';
         }   
-    }
-
-    setNewCover = e =>{
-        this.setState({
-            newCover: e.target.value,
-        })
     }
 
     setNewName = e =>{
@@ -162,9 +154,6 @@ class AnimeRow extends React.Component{
                                 this.newData = {
                                     data:{},
                                 };
-                                if(this.state.newCover !== ''){
-                                    this.newData.cover = this.state.newCover
-                                }
                                 if(this.state.newName !== ''){
                                     this.newData.Name = this.state.newName
                                 }
@@ -187,7 +176,6 @@ class AnimeRow extends React.Component{
                                 this.saveEditedRow(this.newData);
                             }}>save</td>
                             <td style={{fontSize: '14px'}}>{this.props.animeInfo.number}</td>
-                            <td><input id='cover-filler' defaultValue={this.props.animeInfo.cover} autoComplete="off" onChange={this.setNewCover}></input></td>
                             <td><input id='title-input' defaultValue={this.props.animeInfo.Name} autoComplete="off" onChange={this.setNewName} required></input></td>
                             <td><textarea id='self_description_data_input' defaultValue={this.props.animeInfo.Personal_Thoughts} onChange={this.setNewPersonalThoughts} rows='9' ></textarea></td>
                             <td><input id='overall-rating-input' defaultValue={this.props.animeInfo.Overall_Rating} onChange={this.setNewOverallRating} type='number' min='0' max='10' step='.1' className='number-input' autoComplete="off"></input></td>
@@ -359,7 +347,6 @@ class AnimeRow extends React.Component{
                         {deleteCheckbox}
                         {editButton}
                         <td className='numberOrderCol anime-table-data'>{this.props.animeInfo.number}</td>
-                        <td onClick={this.prepareUpdate} className='coverCol anime-table-data'>{this.props.animeInfo.cover}</td>
                         <td className='nameCol anime-table-data'>{this.props.animeInfo.Name}</td>
                         {this.state.personalThoughtsTD}
                         <td className='overallRatingCol anime-table-data'>{this.props.animeInfo.Overall_Rating}</td>
@@ -387,7 +374,6 @@ class AnimeRow extends React.Component{
             : 
             <td style={{display:'none'}}></td>;
 
-            let newCover = this.newData.cover ? this.newData.cover : this.props.animeInfo.cover
             let newName = this.newData.Name ? this.newData.Name : this.props.animeInfo.Name;
             let newPersonalThoughts = this.newData.data.Personal_Thoughts ? this.newData.data.Personal_Thoughts : this.props.animeInfo.Personal_Thoughts;   
             let newPersonalThoughtsTD = <td className='personalThoughtsCol anime-table-data' id='personalThoughts'>
@@ -402,7 +388,6 @@ class AnimeRow extends React.Component{
                         {deleteCheckbox}
                         {editButton}
                         <td className='numberOrderCol anime-table-data'>{this.props.animeInfo.number}</td>
-                        <td onClick={this.prepareUpdate} className='coverCol anime-table-data'>{newCover}</td>
                         <td className='nameCol anime-table-data'>{newName}</td>
                         {newPersonalThoughtsTD}
                         <td className='overallRatingCol anime-table-data'>{newOverallRating}</td>
@@ -413,7 +398,6 @@ class AnimeRow extends React.Component{
         }else{
             this.row =  <tr className='anime-info-row'>
                             <td style={{fontSize: '14px'}} className='numberOrderCol'>{this.props.rowNumber}</td>
-                            <td><input id='cover-filler' className='coverCol' placeholder='filler' autoComplete="off"></input></td>
                             <td><input id='title-input' className='nameCol' placeholder='title' autoComplete="off" required></input></td>
                             <td><textarea id='self_description_data_input' className='personalThoughtsCol' rows='9' ></textarea></td>
                             <td><input id='overall-rating-input' className='overallRatingCol' type='number' min='0' max='10' step='.1' onChange={this.handleNumberChange} autoComplete="off"></input></td>

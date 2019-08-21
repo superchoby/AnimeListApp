@@ -19,6 +19,10 @@ textarea{
     font-family: 'Segoe UI'
 }
 
+#self_description_data_input{
+    width: 100%;
+}
+
 .date-input::-webkit-input-placeholder { /* Chrome/Opera/Safari */
     font-size: 9px;
 }
@@ -33,10 +37,6 @@ textarea{
 
 .date-input:-moz-placeholder { /* Firefox 18- */
     font-size: 9px;
-}
-  
-#cover-filler{
-    width: 25px;
 }
 
 #personalThoughts{
@@ -96,10 +96,6 @@ textarea{
     .numberOrderCol{
         display: none;
     }
-
-    .coverCol{
-        width: 15%;
-    }
     
     .nameCol{
         width: 18%;
@@ -114,3 +110,4 @@ textarea{
     }
 
 }
+

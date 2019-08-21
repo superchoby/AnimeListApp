@@ -126,32 +126,28 @@ thead tr th{
     padding-right: 20px;
 }
 
-.coverCol{
-    width: 5%;
-}
-
 .nameCol{
-    width: 6%;
+    width: 16%;
 }
 
 .personalThoughtsCol{
-    width: 14%;
+    width: 18%;
 }
 
 .overallRatingCol{
-    width: 11%;
+    width: 10%;
 }
 
 .opRatingCol{
-    width: 8%;
+    width: 10%;
 }
 
 .dateStartCol{
-    width: 8%;
+    width: 14%;
 }
 
 .dateFinishCol{
-    width: 7%;
+    width: 14%;
 }
 
 .deleteCheckboxCol{
@@ -291,10 +287,6 @@ thead tr th{
 
     .opRatingCol{
         display: none;
-    }
-
-    .coverCol{
-        width: 15%;
     }
     
     .nameCol{
