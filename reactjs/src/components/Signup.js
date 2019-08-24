@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import './Signup.css'
 
 /**
  * @file Signup is a React Component that handles account creation
@@ -65,7 +66,12 @@ class SignupPage extends Component {
    * if signup info is valid, a token is returned.
    */
   handleSubmit = e =>{
-    axios.post('http://127.0.0.1:8000/users/v1/user/', this.state)
+    let newAccount = {
+      email: this.state.email,
+      username: this.state.username,
+      password: this.state.password,
+    }
+    axios.post('http://127.0.0.1:8000/users/v1/user/', newAccount)
     .then(res =>{
       this.setState({
         redirect: true,
@@ -79,21 +85,27 @@ class SignupPage extends Component {
   
   render() {
     return (
-      <form onSubmit={this.handleSubmit}>
-        <label>
-          Email:
-          <input type='email' onChange={this.updateEmailChange} />
-        </label>
-        <label>
-          Username:
-          <input type='text' onChange={this.updateUsernameChange} />
-        </label>
-        <label>
-          Password:
-          <input type='password' onChange={this.updatePasswordChange} />
-        </label>
-        <input type='submit' value='Submit' />
-      </form>
+        <div id='login-whole-page-div'>
+          <form id='signup-form' onSubmit={this.handleSubmit}>
+
+            <div id='email-input-signup' className='signup-input-divs'>
+              <label>Email:</label>
+              <input className='signup-input' type='email' onChange={this.updateEmailChange} />
+            </div>
+
+            <div id='username-input-signup' className='signup-input-divs'>
+              <label>Username:</label>
+              <input className='signup-input' type='text' onChange={this.updateUsernameChange} />
+            </div>
+
+            <div id='password-input-signup' className='signup-input-divs'>
+              <label>Password:</label>
+              <input className='signup-input' type='password' onChange={this.updatePasswordChange} />
+            </div>
+
+            <input id='signup-submit-button' type='submit' value='Submit' />
+          </form>
+        </div>
     );
   }
 }

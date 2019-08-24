@@ -1,16 +1,4 @@
-.whole-user-registration-page{
-    height: 100vh;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 !important;
-    /* margin: 0 auto; */
-    clear: both;
-    background-color: #282828;
-}
-
-.sign-up-form{
+/* .sign-up-form{
     height: 430px;
     width: 450px;
     border-radius: 10px;
@@ -62,4 +50,65 @@
 
 .already-account:hover{
     text-decoration: underline;
+} */
+
+#signup-form{
+    height: 400px;
+    width: 400px;
+    background: blue;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-radius: 5px;
+}
+
+.signup-input{
+    margin: 0 auto;
+    border: none;
+    height: 35px;
+    /* width: 300px; */
+    width: 100%;
+    border-radius: 10px;
+}
+
+#email-input-signup{
+    height: 50px;
+}
+
+#email-input-signup label{
+    display: block;
+}
+
+#username-input-signup label{
+    display: block;
+}
+
+#username-input-signup input{
+    display: block;
+}
+
+#password-input-signup label{
+    display: block;
+}
+
+#password-input-signup input{
+    display: block;
+}
+
+.signup-input-divs{
+    margin: 15px;
+}
+
+#signup-submit-button{
+    width: 80px;
+    height: 30px;
+    margin: 0 auto;
+}
+
+#signup-whole-page-div{
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

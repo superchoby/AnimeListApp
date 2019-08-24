@@ -49,6 +49,7 @@ th{
     font-family: Sans-Serif;
     height: 240px;
     background-image: url("../images/animetreebackground.jpg");
+    border: none;
 }
 
 form{
