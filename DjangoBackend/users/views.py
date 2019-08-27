@@ -1,3 +1,4 @@
+import copy
 from .models import User
 from rest_framework import viewsets, mixins
 from .serializers import UserSerializer
@@ -24,8 +25,10 @@ class UserView(mixins.RetrieveModelMixin,
             username = request.data['username'].lower(),
             password = request.data['password'],
             )
-            Token.objects.get_or_create(user=user)        
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            newToken = Token.objects.get_or_create(user=user)
+            user_data = copy.deepcopy(serializer.data)
+            user_data['token'] = str(newToken[0])
+            return Response(user_data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, 
             status=status.HTTP_400_BAD_REQUEST)

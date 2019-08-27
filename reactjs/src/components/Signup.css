@@ -1,65 +1,73 @@
-.whole-user-registration-page{
-    height: 100vh;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 !important;
-    /* margin: 0 auto; */
-    clear: both;
-    background-color: #282828;
-}
-
-.sign-up-form{
-    height: 430px;
-    width: 450px;
-    border-radius: 10px;
-    background-color:#3333FF;
+#signup-form{
+    height: 400px;
+    width: 400px;
+    background: blue;
     display: flex;
     flex-direction: column;
-    font-family: "Open Sans";
-}
-
-.sign-up-info-enter{
-    margin: 0 auto;
-    width: 78%;
-}
-
-.sign-up-heading{
-    display: block;
-    margin: 25px auto;
-    margin-bottom: 0;
-    font-size: 24px;
-}
-
-.sign-up-info-enter > div{
-    margin: 15px 0;
-}
-
-.sign-up-info-enter > button{
-    width: 100%;
-    padding: 11px 0;
+    justify-content: center;
     border-radius: 5px;
 }
 
-.sign-up-link{
-    text-decoration: underline;
-    cursor: pointer;
-    color: #4e9af1;
-}
-
-.signup-button{
-    background-color:#4e9af1;
+.signup-input{
+    margin: 0 auto;
     border: none;
-    margin-top: 20px;
+    height: 35px;
+    /* width: 300px; */
+    width: 100%;
+    border-radius: 10px;
 }
 
-.already-account{
-    font-size: 13px;
-    cursor: pointer;
-    color: #4e9af1;
+#email-input-signup{
+    height: 50px;
 }
 
-.already-account:hover{
+#email-input-signup label{
+    display: block;
+}
+
+#username-input-signup label{
+    display: block;
+}
+
+#username-input-signup input{
+    display: block;
+}
+
+#password-input-signup label{
+    display: block;
+}
+
+#password-input-signup input{
+    display: block;
+}
+
+.signup-input-divs{
+    margin: 15px;
+}
+
+#signup-submit-button{
+    width: 80px;
+    height: 30px;
+    margin: 0 auto;
+}
+
+#signup-whole-page-div{
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#login-link1{
+    display: inline;
+}
+
+.login-link{
     text-decoration: underline;
+    color: black;
+}
+
+#signup-success-message{
+    font-size: 48px;
 }
