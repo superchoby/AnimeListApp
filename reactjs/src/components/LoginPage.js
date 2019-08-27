@@ -2,9 +2,8 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { storeToken, storeUsername } from '../actions/index';
 import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom';
+import { Redirect, NavLink } from 'react-router-dom';
 import './LoginPage.css';
-
 /**
  * @file LoginPage is a React Component that handles user authentication
  * 
@@ -107,6 +106,7 @@ class LoginPage extends Component {
             <input className='login-input' type='password' onChange={this.updatePasswordChange} />
           </div>
           <input id='login-submit-button' type='submit' value='Submit' />
+          <span style={{'textAlign': 'center'}}>Don't have an account yet? <NavLink to='/sign-up'><p id='signup-link'>Sign up</p></NavLink></span>
         </form>
       </div>
     );
